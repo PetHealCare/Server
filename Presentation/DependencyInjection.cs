@@ -12,6 +12,7 @@
 		public static void AddPackage(this IServiceCollection services)
 		{
 			//Add other service in nuget package
+			services.AddSwaggerGen();
 		}
 
 		/// <summary>
