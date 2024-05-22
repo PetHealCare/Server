@@ -19,6 +19,7 @@ namespace BusinessObjects.Models
         public virtual Doctor Doctor { get; set; } = null!;
         public virtual Schedule Schedule { get; set; } = null!;
         public virtual Service Service { get; set; } = null!;
+
         public virtual ICollection<Booking> Bookings { get; set; }
     }
 }
