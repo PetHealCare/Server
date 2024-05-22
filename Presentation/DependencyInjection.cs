@@ -1,4 +1,6 @@
-﻿namespace Presentation
+﻿using DataAccessLayers;
+
+namespace Presentation
 {
 	/// <summary>
 	/// Functions for create dependency injections
@@ -25,6 +27,8 @@
 			//EX:
 			//services.AddScoped<IAccountRepository, AccountRepository>();
 			//services.AddScoped<IAccountService, AccountService>();
+
+			services.AddSingleton<CustomerDAO>();
 		}
 	}
 
