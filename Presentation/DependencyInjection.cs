@@ -31,6 +31,8 @@ namespace Presentation
 			//services.AddScoped<IAccountService, AccountService>();
 			services.AddScoped<ICustomerRepository, CustomerRepository>();
 			services.AddScoped<ICustomerService, CustomerService>();
+			services.AddScoped<IServiceRepository, ServiceRepository>();
+			services.AddScoped<IServiceService, ServiceService>();
             //services.AddSingleton<CustomerDAO>();
            
         }
