@@ -10,7 +10,7 @@ namespace DataAccessLayers
 {
 	public class GenericDAO<T> : IGenericDAO<T> where T : class
 	{
-		private readonly PetHealthCareContext _context;
+		protected readonly PetHealthCareContext _context;
 
 		public GenericDAO(PetHealthCareContext context)
 		{

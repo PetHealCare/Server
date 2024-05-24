@@ -1,4 +1,6 @@
 ﻿using DataAccessLayers;
+using Repositories;
+using Services;
 
 namespace Presentation
 {
@@ -27,9 +29,11 @@ namespace Presentation
 			//EX:
 			//services.AddScoped<IAccountRepository, AccountRepository>();
 			//services.AddScoped<IAccountService, AccountService>();
-
-			services.AddSingleton<CustomerDAO>();
-		}
+			services.AddScoped<ICustomerRepository, CustomerRepository>();
+			services.AddScoped<ICustomerService, CustomerService>();
+            //services.AddSingleton<CustomerDAO>();
+           
+        }
 	}
 
 }
