@@ -45,14 +45,13 @@ namespace BusinessObjects.Models
             var strConn = config["ConnectionStrings:DefaultConnectionString"];
             return strConn;
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Bill>(entity =>
             {
                 entity.ToTable("Bill");
 
-                entity.HasIndex(e => e.BookingId, "UQ__Bill__C6D03BEC23B57B47")
+                entity.HasIndex(e => e.BookingId, "UQ__Bill__C6D03BECADD4FF26")
                     .IsUnique();
 
                 entity.Property(e => e.BillId).HasColumnName("billID");
@@ -121,7 +120,7 @@ namespace BusinessObjects.Models
                         r => r.HasOne<Booking>().WithMany().HasForeignKey("BookingId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__BookingSl__booki__3D5E1FD2"),
                         j =>
                         {
-                            j.HasKey("BookingId", "SlotBookingId").HasName("PK__BookingS__6F8E480AB77B2EA0");
+                            j.HasKey("BookingId", "SlotBookingId").HasName("PK__BookingS__6F8E480A59D00F5A");
 
                             j.ToTable("BookingSlot");
 
@@ -202,7 +201,7 @@ namespace BusinessObjects.Models
             modelBuilder.Entity<MedicalRecord>(entity =>
             {
                 entity.HasKey(e => e.RecordId)
-                    .HasName("PK__MedicalR__D825197E43E81FE7");
+                    .HasName("PK__MedicalR__D825197E7ADB3A66");
 
                 entity.ToTable("MedicalRecord");
 
