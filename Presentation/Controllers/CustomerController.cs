@@ -30,12 +30,23 @@ namespace Presentation.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginCustomerRequest loginRequest)
         {
-            var reponse = _service.Login(loginRequest);
-            if (reponse == null)
+            var response = _service.Login(loginRequest);
+            if (response == null)
             {
                 return NotFound();
             }
-            return Ok(reponse);
+            return Ok(response);
+        }
+
+        [HttpPost("Register")]
+        public IActionResult Register(RegisterRequest registerRequest) 
+        {
+            var response = _service.Register(registerRequest);
+            if(registerRequest == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
         }
     }
 }
