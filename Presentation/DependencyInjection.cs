@@ -44,6 +44,12 @@ namespace Presentation
 			services.AddScoped<ICustomerService, CustomerService>();
 			services.AddScoped<IServiceRepository, ServiceRepository>();
 			services.AddScoped<IServiceService, ServiceService>();
+			services.AddScoped<ISlotBookingRepository, SlotBookingRepository>();
+			services.AddScoped<ISlotBookingService, SlotBookingService>();
+			services.AddScoped<IBookingRepository, BookingRepository>();
+			services.AddScoped<IBookingService, BookingService>();
+			services.AddScoped<IScheduleRepository, ScheduleRepository>();
+			services.AddScoped<IScheduleService, ScheduleService>();
             //services.AddSingleton<CustomerDAO>();
            
         }
