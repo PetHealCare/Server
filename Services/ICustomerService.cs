@@ -13,6 +13,7 @@ namespace Services
     {
         public List<Customer> GetAll();
         public Customer Login(LoginCustomerRequest loginCustomerRequest);
+        public bool Register(RegisterRequest registerRequest);
     }
     public class CustomerService : ICustomerService
     {
@@ -30,5 +31,12 @@ namespace Services
         {
             return _repo.Login(loginCustomerRequest);
         }
+
+        public bool Register(RegisterRequest registerRequest)
+        {
+            return _repo.Register(registerRequest);
+        }
+
+       
     }
 }

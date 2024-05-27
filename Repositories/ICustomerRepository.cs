@@ -13,6 +13,8 @@ namespace Repositories
     {
         public List<Customer> GetAll();
         public Customer Login(LoginCustomerRequest loginCustomerRequest);
+        public bool Register(RegisterRequest registerRequest);
+
     }
     public class CustomerRepository : ICustomerRepository
     {
@@ -24,6 +26,11 @@ namespace Repositories
         public Customer Login(LoginCustomerRequest loginCustomerRequest)
         {
             return CustomerDAO.Instance.Login(loginCustomerRequest);
+        }
+
+        public bool Register(RegisterRequest registerRequest)
+        {
+            return CustomerDAO.Instance.Resgiter(registerRequest);
         }
     }
 }
