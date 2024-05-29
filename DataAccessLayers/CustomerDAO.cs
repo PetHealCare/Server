@@ -47,5 +47,20 @@ namespace DataAccessLayers
             return _context.SaveChanges() > 0;
            
         }
+
+        public bool UpdateProfile(UpdateProfileCustomerResquest customerResquest)
+        {
+            Customer customerUpdate = GetById(customerResquest.CustomerId);
+            if (customerUpdate == null)
+            {
+                return false;
+            }
+            customerUpdate.FullName = customerResquest.FullName;
+            customerUpdate.PhoneNumber = customerResquest.PhoneNumber;
+            customerUpdate.Password = customerResquest.Password;
+            customerUpdate.Address = customerResquest.Address;
+            _context.Entry(customerUpdate).State = EntityState.Modified;
+            return _context.SaveChanges() > 0;
+        }
     }
 }

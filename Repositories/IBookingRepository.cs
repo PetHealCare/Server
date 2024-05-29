@@ -17,7 +17,7 @@ namespace Repositories
 
         public Booking GetBookingById(int booking);
         public Task<bool> LinkBookingToSlotBooking(int bookingId, int slotBookingId);
-
+    
     }
     public class BookingRepository : IBookingRepository
     {
