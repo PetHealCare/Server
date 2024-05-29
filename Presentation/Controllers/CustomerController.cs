@@ -27,6 +27,16 @@ namespace Presentation.Controllers
             return Ok(response);
 
         }
+        [HttpGet("{id}")]
+        public IActionResult GetCustomerById(int id)
+        {
+            var response = _service.GetCustomerById(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
         [HttpPost("login")]
         public IActionResult Login(LoginCustomerRequest loginRequest)
         {
@@ -43,6 +53,16 @@ namespace Presentation.Controllers
         {
             var response = _service.Register(registerRequest);
             if(registerRequest == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+        [HttpPut("UpdateProfile")]
+        public IActionResult UpdateProfile(UpdateProfileCustomerResquest customerResquest)
+        {
+            var response = _service.UpdateProfile(customerResquest);
+            if (response == false)
             {
                 return NotFound();
             }

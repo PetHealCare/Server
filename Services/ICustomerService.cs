@@ -14,6 +14,8 @@ namespace Services
         public List<Customer> GetAll();
         public Customer Login(LoginCustomerRequest loginCustomerRequest);
         public bool Register(RegisterRequest registerRequest);
+        public bool UpdateProfile(UpdateProfileCustomerResquest customerResquest);
+        public Customer GetCustomerById(int customerId);
     }
     public class CustomerService : ICustomerService
     {
@@ -27,6 +29,11 @@ namespace Services
             return _repo.GetAll();
         }
 
+        public Customer GetCustomerById(int customerId)
+        {
+            return _repo.GetCustomerById(customerId);
+        }
+
         public Customer Login(LoginCustomerRequest loginCustomerRequest)
         {
             return _repo.Login(loginCustomerRequest);
@@ -37,6 +44,10 @@ namespace Services
             return _repo.Register(registerRequest);
         }
 
-       
+        public bool UpdateProfile(UpdateProfileCustomerResquest customerResquest)
+        {
+           
+           return _repo.UpdateProfile(customerResquest);
+        }
     }
 }
