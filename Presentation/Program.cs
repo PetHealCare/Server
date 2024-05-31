@@ -1,3 +1,4 @@
+using BusinessObjects.Models;
 using Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,6 @@ builder.Services.AddPackage();
 builder.Services.AddMasterServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
