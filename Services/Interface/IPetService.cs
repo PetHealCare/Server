@@ -10,11 +10,12 @@ using Services.Extentions.Paginate;
 
 namespace Services.Interface
 {
-    public interface IPetService
+	public interface IPetService
 	{
-		public Task<PetResponse> Create(CreatePetRequest request);
-		public Task<PetResponse> Update(UpdatePetRequest request);
-		public Task<PetResponse> GetById(int id);
-		public Task<PaginatedList<PetResponse>> GetList(GetListPetRequest request);
+		Task<PetResponse> Create(CreatePetRequest request);
+		Task<PetResponse> Update(UpdatePetRequest request);
+		Task<PetResponse> GetById(int id);
+		Task<PaginatedList<PetResponse>> GetList(GetListPetRequest request);
+		Task<bool> Delete(int id);
 	}
 }

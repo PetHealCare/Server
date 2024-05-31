@@ -1,5 +1,7 @@
-﻿using BusinessObjects.Models;
+﻿using System.Reflection;
+using BusinessObjects.Models;
 using DataAccessLayers;
+using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Class;
 using Repositories.Interface;
@@ -32,8 +34,20 @@ namespace Presentation
                                .AllowCredentials();
                     });
             });
-            //Add other service in nuget package
-            services.AddSwaggerGen();
+			//Add other service in nuget package
+			services.AddSwaggerGen(options =>
+			{
+				options.SwaggerDoc("v1", new OpenApiInfo
+				{
+					Version = "v1",
+					Title = "PetHealthCare API",
+					Description = "An ASP.NET Core Web API for Pet Health Care System items",
+				});
+
+				// using System.Reflection;
+				var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+			});
 			services.AddAutoMapper(typeof(MappingProfile).Assembly);
 		}
 

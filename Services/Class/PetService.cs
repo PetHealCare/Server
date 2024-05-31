@@ -39,9 +39,25 @@ namespace Services.Class
 			return response;
 		}
 
+		public async Task<bool> Delete(int id)
+		{
+			var petToDelete = await _repo.GetPetById(id);
+			if (petToDelete == null)
+			{
+				return false;
+			}
+			petToDelete.Status = false;
+			await _repo.Update(petToDelete);
+			return true;
+		}
+
 		public async Task<PetResponse> GetById(int id)
 		{
 			var pet = await _repo.GetPetById(id);
+			if (pet.Status == false)
+			{
+				return null;
+			}
 			var response = _mapper.Map<PetResponse>(pet);
 			return response;
 		}
@@ -50,6 +66,10 @@ namespace Services.Class
 		{
 			var response = new PaginatedList<PetResponse>();
 			var petsQuery = (await _repo.GetList()).AsQueryable();
+
+			//filter pet has not been deleted
+			petsQuery = petsQuery.Where(p => p.Status == true);
+			
 			if (!string.IsNullOrEmpty(request.Name))
 			{
 				petsQuery = petsQuery.Where(p => p.Name.Contains(request.Name));
@@ -73,7 +93,7 @@ namespace Services.Class
 		public async Task<PetResponse> Update(UpdatePetRequest request)
 		{
 			var pet = await _repo.GetPetById(request.PetId);
-			if (pet == null)
+			if (pet == null || pet.Status == false)
 			{
 				return null; // or throw an exception, based on your error handling strategy
 			}
