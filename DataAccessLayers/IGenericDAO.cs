@@ -8,10 +8,11 @@ namespace DataAccessLayers
 {
 	public interface IGenericDAO<T> where T : class
 	{
-		bool Create(T entity);
+		T Create(T entity);
 		T GetById(int id);
 		List<T> GetAll();
 		bool Update(T entity);
 		bool Delete(int id);
+		T UpdateNew(T entity);
 	}
 }

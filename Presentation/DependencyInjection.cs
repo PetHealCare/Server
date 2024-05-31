@@ -1,13 +1,19 @@
-﻿using DataAccessLayers;
+﻿using BusinessObjects.Models;
+using DataAccessLayers;
 using Repositories;
+using Repositories.Class;
+using Repositories.Interface;
 using Services;
+using Services.Class;
+using Services.Interface;
+using Services.MappingProfile;
 
 namespace Presentation
 {
-	/// <summary>
-	/// Functions for create dependency injections
-	/// </summary>
-	public static class DependencyInjection
+    /// <summary>
+    /// Functions for create dependency injections
+    /// </summary>
+    public static class DependencyInjection
 	{
 		/// <summary>
 		/// This function to add dependency injection for NuGet Package
@@ -28,6 +34,7 @@ namespace Presentation
             });
             //Add other service in nuget package
             services.AddSwaggerGen();
+			services.AddAutoMapper(typeof(MappingProfile).Assembly);
 		}
 
 		/// <summary>
@@ -50,9 +57,9 @@ namespace Presentation
 			services.AddScoped<IBookingService, BookingService>();
 			services.AddScoped<IScheduleRepository, ScheduleRepository>();
 			services.AddScoped<IScheduleService, ScheduleService>();
-            //services.AddSingleton<CustomerDAO>();
-           
-        }
+			services.AddScoped<IPetRepository, PetRepository>();
+			services.AddScoped<IPetService, PetService>();
+		}
 	}
 
 }

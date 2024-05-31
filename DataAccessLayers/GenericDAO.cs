@@ -17,10 +17,14 @@ namespace DataAccessLayers
 			_context = context;
 		}
 
-		public bool Create(T entity)
+		public T Create(T entity)
 		{
 			_context.Set<T>().Add(entity);
-			return _context.SaveChanges() > 0;
+			if( _context.SaveChanges() > 0)
+			{
+				return entity;
+			}
+			return null;
 		}
 
 		public T GetById(int id)
@@ -38,6 +42,17 @@ namespace DataAccessLayers
 			_context.Set<T>().Attach(entity);
 			_context.Entry(entity).State = EntityState.Modified;
 			return _context.SaveChanges() > 0;
+		}
+
+		public T UpdateNew(T entity)
+		{
+			_context.Set<T>().Attach(entity);
+			_context.Entry(entity).State = EntityState.Modified;
+			if (_context.SaveChanges() > 0)
+			{
+				return entity;
+			}
+			return null;
 		}
 
 		public bool Delete(int id)
