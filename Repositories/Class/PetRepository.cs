@@ -15,7 +15,7 @@ namespace Repositories.Class
 	{
 		public async Task<Pet> Create(Pet request) => PetDAO.Instance.Create(request);
 
-		public async Task<List<Pet>> GetList() => PetDAO.Instance.GetAll();
+		public async Task<IList<Pet>> GetList() => PetDAO.Instance.GetAll();
 
 		public async Task<Pet> GetPetById(int id) => PetDAO.Instance.GetById(id);
 

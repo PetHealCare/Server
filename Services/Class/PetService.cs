@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BusinessObjects.Models;
 using DTOs.Request;
+using DTOs.Request.Pet;
 using DTOs.Response;
 using Repositories.Interface;
+using Services.Extentions.Paginate;
 using Services.Interface;
 
 namespace Services.Class
@@ -44,25 +46,27 @@ namespace Services.Class
 			return response;
 		}
 
-		public async Task<List<PetResponse>> GetList(GetListPetRequest request)
+		public async Task<PaginatedList<PetResponse>> GetList(GetListPetRequest request)
 		{
-			var listPetQuery = (await _repo.GetList()).AsQueryable();
+			var response = new PaginatedList<PetResponse>();
+			var petsQuery = (await _repo.GetList()).AsQueryable();
 			if (!string.IsNullOrEmpty(request.Name))
 			{
-				listPetQuery = listPetQuery.Where(p => p.Name.Contains(request.Name));
+				petsQuery = petsQuery.Where(p => p.Name.Contains(request.Name));
 			}
 
 			if (!string.IsNullOrEmpty(request.Species))
 			{
-				listPetQuery = listPetQuery.Where(p => p.Species.Contains(request.Species));
+				petsQuery = petsQuery.Where(p => p.Species.Contains(request.Species));
 			}
 
 			if(request.CustomerId != null)
 			{
-				listPetQuery = listPetQuery.Where(p => p.CustomerId == request.CustomerId);
+				petsQuery = petsQuery.Where(p => p.CustomerId == request.CustomerId);
 			}
-			var listPet = listPetQuery.ToList();
-			var response = _mapper.Map<List<PetResponse>>(listPet);
+			var filterredPets = petsQuery.ToList();
+			var mapperList = _mapper.Map<IList<PetResponse>>(filterredPets);
+			response = await mapperList.ToPaginateAsync(request);
 			return response;
 		}
 

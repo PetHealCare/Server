@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessObjects.Models;
 using DTOs;
-using DTOs.Request;
+using DTOs.Request.Pet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +72,7 @@ namespace Presentation.Controllers
 		public async Task<IActionResult> GetListPet([FromQuery] GetListPetRequest request)
 		{
 			var response = await _service.GetList(request);
-			if (response == null || !response.Any())
+			if (response == null || response.TotalCount == 0)
 			{
 				return NotFound();
 			}
