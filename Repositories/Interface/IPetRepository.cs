@@ -15,6 +15,5 @@ namespace Repositories.Interface
 		public Task<Pet> Update(Pet request);
 		public Task<Pet> GetPetById(int id);
 		public Task<IList<Pet>> GetList();
-
 	}
 }
