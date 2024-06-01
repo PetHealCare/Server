@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects.Models;
 using DTOs.Request.Pet;
-using DTOs.Response;
+using DTOs.Response.Pet;
 using Services.Extentions.Paginate;
 
 namespace Services.Interface
 {
-	public interface IPetService
+    public interface IPetService
 	{
 		Task<PetResponse> Create(CreatePetRequest request);
 		Task<PetResponse> Update(UpdatePetRequest request);

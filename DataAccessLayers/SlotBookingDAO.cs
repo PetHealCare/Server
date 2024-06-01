@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTOs;
+using DTOs.Request.Booking;
 using System;
 using System.Collections.Generic;
 using System.Linq;

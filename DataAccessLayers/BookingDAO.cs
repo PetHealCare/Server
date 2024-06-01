@@ -18,19 +18,7 @@ namespace DataAccessLayers
         {
 
         }
-        public async Task<Booking> CreateBooking(BookingRequest request)
-        {
-            Booking booking = new Booking();
-            booking.PetId = request.PetId;
-            booking.CustomerId = request.CustomerId;
-            booking.BookingDate = DateTime.Now;
-            booking.Note = request.Note;
-            booking.Status = false;
-            _context.Add(booking);
-            await _context.SaveChangesAsync();
-            return booking;
-        }
-
+       
         public async Task<bool> UpdateStatusBooking(int bookingId)
         {
             Booking booking = _context.Bookings.Find(bookingId);

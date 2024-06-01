@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs
+namespace DTOs.Request.Customer
 {
     public class UpdateProfileCustomerResquest
     {
@@ -13,6 +13,6 @@ namespace DTOs
         public string? PhoneNumber { get; set; }
         public string? Password { get; set; }
         public string? Address { get; set; }
-       
+
     }
 }

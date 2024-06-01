@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.Models;
 using DataAccessLayers;
-using DTOs;
+using DTOs.Request.Schedule;
 using System;
 using System.Collections.Generic;
 using System.Linq;

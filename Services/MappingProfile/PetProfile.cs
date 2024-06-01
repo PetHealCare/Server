@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BusinessObjects.Models;
-using DTOs.Response;
+using DTOs.Response.Pet;
 
 namespace Services.MappingProfile
 {
-	public class PetProfile : Profile
+    public class PetProfile : Profile
 	{
         public PetProfile()
         {

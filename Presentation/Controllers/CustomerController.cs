@@ -1,4 +1,4 @@
-﻿using DTOs;
+﻿using DTOs.Request.Customer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -38,7 +38,7 @@ namespace Presentation.Controllers
             return Ok(response);
         }
         [HttpPost("login")]
-        public IActionResult Login(LoginCustomerRequest loginRequest)
+        public async Task<IActionResult> Login(LoginCustomerRequest loginRequest)
         {
             var response = _service.Login(loginRequest);
             if (response == null)
@@ -49,7 +49,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("Register")]
-        public IActionResult Register(RegisterRequest registerRequest) 
+        public async Task<IActionResult> Register(RegisterRequest registerRequest) 
         {
             var response = _service.Register(registerRequest);
             if(registerRequest == null)
@@ -59,10 +59,10 @@ namespace Presentation.Controllers
             return Ok(response);
         }
         [HttpPut("UpdateProfile")]
-        public IActionResult UpdateProfile(UpdateProfileCustomerResquest customerResquest)
+        public async Task<IActionResult> UpdateProfile(UpdateProfileCustomerResquest customerResquest)
         {
             var response = _service.UpdateProfile(customerResquest);
-            if (response == false)
+            if (response == null)
             {
                 return NotFound();
             }

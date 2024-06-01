@@ -11,6 +11,7 @@ namespace Repositories
 {
     public interface IBookingRepository
     {
+        public Task<List<Booking>> GetAll();
         public Task<Booking> CreateBooking(Booking booking);
 
         public Task<bool> UpdateStatusBooking(int bookingId);
@@ -25,6 +26,11 @@ namespace Repositories
         {
            
             return  BookingDAO.Instance.Create(booking);
+        }
+
+        public async Task<List<Booking>> GetAll()
+        {
+            return BookingDAO.Instance.GetAll();
         }
 
         public Booking GetBookingById(int booking)
