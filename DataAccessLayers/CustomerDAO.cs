@@ -25,24 +25,11 @@ namespace DataAccessLayers
                            .FirstOrDefault(c => c.Email.Equals(loginCustomerRequest.Email) && c.Password.Equals(loginCustomerRequest.Password) && c.Status == true);
         }
 
-        public bool Resgiter(RegisterRequest registerRequest)
+        public bool Resgiter(Customer customer)
         {
-            if (string.IsNullOrWhiteSpace(registerRequest.Email) || string.IsNullOrWhiteSpace(registerRequest.Password))
-            {
-                throw new ArgumentException("Email and password are required.");
-            }
-            if (GetAll().Any(x => x.Email.Equals(registerRequest.Email)))
-            {
-                throw new Exception("A user with this email already exists.");
-            }
+            
 
-            Customer customer = new Customer();
-            customer.FullName = registerRequest.FullName;
-            customer.PhoneNumber = registerRequest.PhoneNumber;
-            customer.Email = registerRequest.Email;
-            customer.Password = registerRequest.Password;
-            customer.Address = registerRequest.Address;
-            customer.Status = true;
+            
             _context.Add(customer);
             return _context.SaveChanges() > 0;
            

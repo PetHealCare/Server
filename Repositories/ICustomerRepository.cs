@@ -12,9 +12,9 @@ namespace Repositories
     public interface ICustomerRepository
     {
         public List<Customer> GetAll();
-        public Customer Login(LoginCustomerRequest loginCustomerRequest);
-        public bool Register(RegisterRequest registerRequest);
-        public bool UpdateProfile(UpdateProfileCustomerResquest customerResquest);
+        public Task<Customer> Login(LoginCustomerRequest loginCustomerRequest);
+        public Task<bool> Register(Customer customer);
+        public Task<bool> UpdateProfile(UpdateProfileCustomerResquest customerResquest);
         public Customer GetCustomerById(int customerId);
 
     }
@@ -30,17 +30,17 @@ namespace Repositories
             return CustomerDAO.Instance.GetById(customerId);
         }
 
-        public Customer Login(LoginCustomerRequest loginCustomerRequest)
+        public async Task<Customer> Login(LoginCustomerRequest loginCustomerRequest)
         {
             return CustomerDAO.Instance.Login(loginCustomerRequest);
         }
 
-        public bool Register(RegisterRequest registerRequest)
+        public async Task<bool> Register(Customer customer)
         {
-            return CustomerDAO.Instance.Resgiter(registerRequest);
+            return CustomerDAO.Instance.Resgiter(customer);
         }
 
-        public bool UpdateProfile(UpdateProfileCustomerResquest updateProfileCustomerResquest)
+        public async Task<bool> UpdateProfile(UpdateProfileCustomerResquest updateProfileCustomerResquest)
         {
             return CustomerDAO.Instance.UpdateProfile(updateProfileCustomerResquest);
         }
