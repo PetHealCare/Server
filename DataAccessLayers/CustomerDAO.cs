@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects.Models;
-using DTOs;
+using DTOs.Request.Customer;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayers
 {
-	public class CustomerDAO : GenericDAO<Customer>
+    public class CustomerDAO : GenericDAO<Customer>
 	{
 		private static readonly Lazy<CustomerDAO> _instance =
 		new Lazy<CustomerDAO>(() => new CustomerDAO(new PetHealthCareContext()));

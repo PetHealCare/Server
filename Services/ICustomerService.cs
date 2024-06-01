@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTOs;
+using DTOs.Request.Customer;
 using Repositories;
 using System;
 using System.Collections.Generic;

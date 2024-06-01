@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTOs;
+using DTOs.Request.Schedule;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

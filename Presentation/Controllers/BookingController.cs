@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTOs;
+using DTOs.Request.Booking;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;

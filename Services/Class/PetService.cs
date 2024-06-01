@@ -7,14 +7,14 @@ using AutoMapper;
 using BusinessObjects.Models;
 using DTOs.Request;
 using DTOs.Request.Pet;
-using DTOs.Response;
+using DTOs.Response.Pet;
 using Repositories.Interface;
 using Services.Extentions.Paginate;
 using Services.Interface;
 
 namespace Services.Class
 {
-	public class PetService : IPetService
+    public class PetService : IPetService
 	{
 		private readonly IPetRepository _repo;
 		private readonly IMapper _mapper;

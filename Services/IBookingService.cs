@@ -1,6 +1,11 @@
-﻿using BusinessObjects.Models;
-using DTOs;
+﻿using AutoMapper;
+using BusinessObjects.Models;
+using DTOs.Request.Booking;
+using DTOs.Request.Schedule;
+using DTOs.Response.Booking;
+using DTOs.Response.Pet;
 using Repositories;
+using Services.Extentions.Paginate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +16,7 @@ namespace Services
 {
     public interface IBookingService
     {
+        
         public Task<Booking> CreateBooking(BookingRequest booking);
         public Task<bool> UpdateStatusBooking(int bookingId);
         public Booking GetBookingById(int booking);
@@ -19,16 +25,26 @@ namespace Services
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _repo;
+        private readonly IMapper _mapper;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly ISlotBookingRepository _slotBookingRepository;
-        public BookingService(IBookingRepository repo, IScheduleRepository scheduleRepository, ISlotBookingRepository slotBookingRepository)
+
+        public BookingService(IBookingRepository repo, IMapper mapper, IScheduleRepository scheduleRepository, ISlotBookingRepository slotBookingRepository)
         {
             _repo = repo;
+            _mapper = mapper;
             _scheduleRepository = scheduleRepository;
             _slotBookingRepository = slotBookingRepository;
         }
-        public async Task<Booking> CreateBooking(BookingRequest booking)
+
+        public async Task<Booking> CreateBooking(BookingRequest request)
         {
+            Booking booking = new Booking();
+            booking.PetId = request.PetId;
+            booking.CustomerId = request.CustomerId;
+            booking.BookingDate = DateTime.Now;
+            booking.Note = request.Note;
+            booking.Status = false;
             return await _repo.CreateBooking(booking);
         }
 
@@ -72,6 +88,8 @@ namespace Services
         {
            return _repo.GetBookingById(booking);
         }
+
+      
 
         public  async Task<bool> UpdateStatusBooking(int bookingId)
         {
