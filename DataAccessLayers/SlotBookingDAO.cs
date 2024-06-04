@@ -17,6 +17,94 @@ namespace DataAccessLayers
         {
 
         }
+        public List<SlotBooking> GetListSlotBooking()
+        {
+            return  _context.SlotBookings.Select(s => new SlotBooking
+            {
+                SlotBookingId = s.SlotBookingId,
+                DoctorId = s.DoctorId,
+                ServiceId = s.ServiceId,
+                ScheduleId = s.ScheduleId,
+                Status = s.Status,
+                Doctor = new Doctor
+                {
+                    DoctorId = s.Doctor.DoctorId,
+                    FullName = s.Doctor.FullName,
+                    PhoneNumber = s.Doctor.PhoneNumber,
+                    Email = s.Doctor.Email,
+                    Speciality = s.Doctor.Speciality,
+
+                },
+                Schedule = new Schedule
+                {
+                    ScheduleId = s.Schedule.ScheduleId,
+                    StartTime = s.Schedule.StartTime,
+                    EndTime = s.Schedule.EndTime,
+                    
+                },
+                Service = new Service
+                {
+                    ServiceId = s.Service.ServiceId,
+                    ServiceName = s.Service.ServiceName,
+                    Price = s.Service.Price,
+                    Description = s.Service.Description
+                }
+                
+            }).
+                
+                ToList();
+        }
+
+        public SlotBooking GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null)
+        {
+            var query = _context.SlotBookings.AsQueryable();
+
+            if (doctorId.HasValue)
+            {
+                query = query.Where(s => s.DoctorId == doctorId.Value);
+            }
+
+            if (serviceId.HasValue)
+            {
+                query = query.Where(s => s.ServiceId == serviceId.Value);
+            }
+
+            if (scheduleId.HasValue)
+            {
+                query = query.Where(s => s.ScheduleId == scheduleId.Value);
+            }
+
+            return query.Select(s => new SlotBooking
+            {
+                SlotBookingId = s.SlotBookingId,
+                DoctorId = s.DoctorId,
+                ServiceId = s.ServiceId,
+                ScheduleId = s.ScheduleId,
+                Status = s.Status,
+                Doctor = new Doctor
+                {
+                    DoctorId = s.Doctor.DoctorId,
+                    FullName = s.Doctor.FullName,
+                    PhoneNumber = s.Doctor.PhoneNumber,
+                    Email = s.Doctor.Email,
+                    Speciality = s.Doctor.Speciality,
+                },
+                Schedule = new Schedule
+                {
+                    ScheduleId = s.Schedule.ScheduleId,
+                    StartTime = s.Schedule.StartTime,
+                    EndTime = s.Schedule.EndTime,
+                },
+                Service = new Service
+                {
+                    ServiceId = s.Service.ServiceId,
+                    ServiceName = s.Service.ServiceName,
+                    Price = s.Service.Price,
+                    Description = s.Service.Description,
+                }
+            }).FirstOrDefault();
+        }
+
         public async Task<SlotBooking> Create(SlotBookingRequest request)
         {
             SlotBooking booking = new SlotBooking();
@@ -28,5 +116,7 @@ namespace DataAccessLayers
             await _context.SaveChangesAsync();
             return booking;
         }
+
+
     }
 }
