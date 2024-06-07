@@ -73,6 +73,8 @@ namespace Presentation
 			services.AddScoped<IScheduleService, ScheduleService>();
 			services.AddScoped<IPetRepository, PetRepository>();
 			services.AddScoped<IPetService, PetService>();
+			services.AddScoped<IStaffRepository, StaffRepository>();
+			services.AddScoped<IStaffService, StaffService>();
 		}
 	}
 
