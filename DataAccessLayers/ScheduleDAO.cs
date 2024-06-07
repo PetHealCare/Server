@@ -19,13 +19,23 @@ namespace DataAccessLayers
 
     }
     
-
-        public async Task<Schedule> Create(ScheduleRequest request)
+        public async Task<bool> UpdateSchedule(Schedule schedule)
         {
-            Schedule schedule = new Schedule();
-            schedule.StartTime = request.StartTime;
-            schedule.EndTime = request.EndTime;
-            schedule.Status = true;
+            var scheduleUpdate = _context.Schedules.FirstOrDefault(s => s.ScheduleId == schedule.ScheduleId);
+            if (scheduleUpdate == null)
+            {
+                return false;
+            }
+            scheduleUpdate.StartTime = schedule.StartTime;
+            scheduleUpdate.EndTime = schedule.EndTime;
+            scheduleUpdate.Status = schedule.Status;
+             _context.Schedules.Update(scheduleUpdate);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Schedule> Create(Schedule schedule)
+        {
+            
             _context.Add(schedule);
             await _context.SaveChangesAsync();
             return schedule;

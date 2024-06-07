@@ -14,9 +14,10 @@ namespace Services
     {
         public Task<SlotBooking> Create(SlotBookingRequest request);
         public Task<List<SlotBookingResponse>> GetAll();
-        public SlotBookingResponse GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null);
-        public bool Update(SlotBooking slotBooking);
+        public Task<SlotBookingResponse> GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null);
+        public Task<bool> Update(SlotBookingRequest slotBooking);
         public bool Delete(int id);
+        public Task<SlotBookingResponse> Get(int id);
     }
     public class SlotBookingService : ISlotBookingService
     {
@@ -44,6 +45,34 @@ namespace Services
         {
             return _slotBookingRepository.Delete(id);
         }
+
+        public async Task<SlotBookingResponse> Get(int id)
+        {
+            var slotBooking = await _slotBookingRepository.GetSlotBooking(id);
+            if (slotBooking == null)
+            {
+                throw new Exception("Failed to get slot booking");
+            }
+            SlotBookingResponse slotBookingResponse = new SlotBookingResponse();
+            slotBookingResponse.Id = slotBooking.SlotBookingId;
+            slotBookingResponse.DoctorId = slotBooking.DoctorId;
+            slotBookingResponse.ServiceId = slotBooking.ServiceId;
+            slotBookingResponse.ScheduleId = slotBooking.ScheduleId;
+            slotBookingResponse.DoctorName = slotBooking.Doctor.FullName;
+            slotBookingResponse.DoctorPhoneNumber = slotBooking.Doctor.PhoneNumber;
+            slotBookingResponse.DoctorEmail = slotBooking.Doctor.Email;
+            slotBookingResponse.DoctorSpeciality = slotBooking.Doctor.Speciality;
+            slotBookingResponse.ServiceName = slotBooking.Service.ServiceName;
+            slotBookingResponse.ServiceDescription = slotBooking.Service.Description;
+            slotBookingResponse.Price = slotBooking.Service.Price;
+            slotBookingResponse.StartTime = slotBooking.Schedule.StartTime.Value;
+            slotBookingResponse.EndTime = slotBooking.Schedule.EndTime.Value;
+            slotBookingResponse.Status = slotBooking.Status.Value;
+
+            return slotBookingResponse;
+        }
+
+     
 
         public async Task<List<SlotBookingResponse>> GetAll()
         {
@@ -76,9 +105,9 @@ namespace Services
             return  slotBookingResponses;
         }
 
-        public SlotBookingResponse GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null)
+        public async Task<SlotBookingResponse> GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null)
         {
-           var response = _slotBookingRepository.GetListSlotBooking(doctorId, serviceId, scheduleId);
+           var response = await _slotBookingRepository.GetListSlotBooking(doctorId, serviceId, scheduleId);
             if (response == null)
             {
                 throw new Exception("Failed to get slot booking");
@@ -101,9 +130,16 @@ namespace Services
             return slotBookingResponse;
         }
 
-        public bool Update(SlotBooking slotBooking)
+        public async Task<bool> Update(SlotBookingRequest request)
         {
-            return _slotBookingRepository.Update(slotBooking);
+            var slotbooking = new SlotBooking();
+            slotbooking.SlotBookingId = request.SlotBookingId;
+            slotbooking.DoctorId = request.DoctorId;
+            slotbooking.ServiceId = request.ServiceId;
+            slotbooking.ScheduleId = request.ScheduleId;
+            slotbooking.Status = request.Status;
+
+            return await _slotBookingRepository.Update(slotbooking);
         }
     }
 }

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.Request.Schedule
+namespace DTOs.Response.Schedule
 {
-    public class ScheduleRequest
+    public class ScheduleResponse
     {
         public int ScheduleId { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public bool? Status { get; set; }
-
     }
 }

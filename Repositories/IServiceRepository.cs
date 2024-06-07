@@ -13,7 +13,7 @@ namespace Repositories
         public List<Service> GetAll();
         public Service GetById(int id);
         public Service Create(Service service);
-        public bool Update(Service service);
+        public Task<bool> Update(Service service);
         public bool Delete(int id);
 
     }
@@ -39,9 +39,9 @@ namespace Repositories
             return ServiceDAO.Instance.GetById(id);
         }
 
-        public bool Update(Service service)
+        public async Task<bool> Update(Service service)
         {
-            return ServiceDAO.Instance.Update(service);
+            return await ServiceDAO.Instance.UpdateService(service);
         }
     }
 }

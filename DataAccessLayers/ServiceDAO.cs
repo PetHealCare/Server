@@ -16,5 +16,20 @@ namespace DataAccessLayers
         {
 
         }
+
+        public async Task<bool> UpdateService(Service service)
+        {
+            var serviceToUpdate = GetById(service.ServiceId);
+            if (serviceToUpdate == null)
+            {
+                return false;
+            }
+            serviceToUpdate.ServiceName = service.ServiceName;
+            serviceToUpdate.Description = service.Description;
+            serviceToUpdate.Price = service.Price;
+            _context.Services.Update(serviceToUpdate);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

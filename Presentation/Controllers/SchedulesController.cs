@@ -56,7 +56,7 @@ namespace Presentation.Controllers
             }
         }
         [HttpPut]
-        public async Task<IActionResult> Update(Schedule request)
+        public async Task<IActionResult> Update(ScheduleRequest request)
         {
             try
             {

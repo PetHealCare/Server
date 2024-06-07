@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace DTOs.Request.Booking
 {
-    public class BookingRequest : PagingRequest
+    public class BookingRequest 
     {
         public int BookingId { get; set; }
         public int PetId { get; set; }
         public int CustomerId { get; set; }
         public DateTime? BookingDate { get; set; }
         public string? Note { get; set; }
+        public bool? Status { get; set; }
         
 
     }

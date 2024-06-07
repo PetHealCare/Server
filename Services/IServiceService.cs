@@ -1,4 +1,6 @@
 ﻿using BusinessObjects.Models;
+using DTOs.Request.Service;
+using DTOs.Response.Service;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,10 @@ namespace Services
 {
     public interface IServiceService
     {
-        public List<Service> GetAll();
-        public Service Get(int id);
-        public Service Create(Service service);
-        public bool Update(Service service);
+        public List<ServiceResponse> GetAll();
+        public ServiceResponse Get(int id);
+        public Service Create(ServiceRequest service);
+        public Task<bool> Update(ServiceRequest service);
         public bool Delete(int id);
         
     }
@@ -25,9 +27,15 @@ namespace Services
             _repo = repo;
         }
 
-        public Service Create(Service service)
+        public  Service Create(ServiceRequest request)
         {
-            return _repo.Create(service);
+            var service = new Service();
+            service.ServiceName = request.ServiceName;
+            service.Description = request.Description;
+            service.Price = request.Price;
+
+
+            return  _repo.Create(service);
         }
 
         public bool Delete(int id)
@@ -35,19 +43,45 @@ namespace Services
             return _repo.Delete(id);
         }
 
-        public Service Get(int id)
-        {
-            return _repo.GetById(id);
+        public ServiceResponse Get(int id)
+        { 
+            var service = _repo.GetById(id);
+            if (service == null)
+            {
+                throw new Exception("Service not found.");
+            }
+            var serviceResponse = new ServiceResponse();
+            serviceResponse.ServiceId = service.ServiceId;
+            serviceResponse.ServiceName = service.ServiceName;
+            serviceResponse.Description = service.Description;
+            serviceResponse.Price = service.Price;
+            return serviceResponse;
         }
 
-        public List<Service> GetAll()
+        public List<ServiceResponse> GetAll()
         {
-            return _repo.GetAll();
+            var services = _repo.GetAll();
+            List<ServiceResponse> serviceResponses = new List<ServiceResponse>();
+            foreach (var service in services)
+            {
+                ServiceResponse serviceResponse = new ServiceResponse();
+                serviceResponse.ServiceId = service.ServiceId;
+                serviceResponse.ServiceName = service.ServiceName;
+                serviceResponse.Description = service.Description;
+                serviceResponse.Price = service.Price;
+                serviceResponses.Add(serviceResponse);
+            }
+            return serviceResponses;
         }
 
-        public bool Update(Service service)
+        public async Task<bool> Update(ServiceRequest request)
         {
-            return _repo.Update(service);
+            var service = new Service();
+            service.ServiceId = request.ServiceId;
+            service.ServiceName = request.ServiceName;
+            service.Description = request.Description;
+            service.Price = request.Price;
+            return await _repo.Update(service);
         }
     }
 }

@@ -15,9 +15,11 @@ namespace Repositories
         public Task<Booking> CreateBooking(Booking booking);
 
         public Task<bool> UpdateStatusBooking(int bookingId);
+        public Task<bool> Update(Booking booking);
 
-        public Booking GetBookingById(int booking);
+        public Task<Booking> GetBookingById(int booking);
         public Task<bool> LinkBookingToSlotBooking(int bookingId, int slotBookingId);
+        public Task<bool> DeleteBooking(int bookingId);
     
     }
     public class BookingRepository : IBookingRepository
@@ -28,14 +30,19 @@ namespace Repositories
             return  BookingDAO.Instance.Create(booking);
         }
 
-        public async Task<List<Booking>> GetAll()
+        public Task<bool> DeleteBooking(int bookingId)
         {
-            return BookingDAO.Instance.GetAll();
+           return BookingDAO.Instance.Delete(bookingId);
         }
 
-        public Booking GetBookingById(int booking)
+        public async Task<List<Booking>> GetAll()
         {
-            return  BookingDAO.Instance.GetById(booking);
+            return await BookingDAO.Instance.GetBookings();
+        }
+
+        public async Task<Booking> GetBookingById(int booking)
+        {
+            return  await BookingDAO.Instance.GetBookingById(booking);
         }
 
         public async Task<bool> LinkBookingToSlotBooking(int bookingId, int slotBookingId)
@@ -43,9 +50,16 @@ namespace Repositories
             return await BookingDAO.Instance.LinkBookingToSlotBooking(bookingId, slotBookingId);
         }
 
+        public async Task<bool> Update(Booking booking)
+        {
+            return await BookingDAO.Instance.Update(booking);
+        }
+
         public async Task<bool> UpdateStatusBooking(int bookingId)
         {
             return  await BookingDAO.Instance.UpdateStatusBooking(bookingId);
         }
+
+        
     }
 }
