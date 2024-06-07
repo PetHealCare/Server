@@ -29,6 +29,7 @@ namespace BusinessObjects.Models
         public virtual DbSet<SlotBooking> SlotBookings { get; set; } = null!;
         public virtual DbSet<staff> staff { get; set; } = null!;
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -45,6 +46,7 @@ namespace BusinessObjects.Models
             var strConn = config["ConnectionStrings:DefaultConnectionString"];
             return strConn;
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Bill>(entity =>
@@ -372,6 +374,11 @@ namespace BusinessObjects.Models
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("fullName");
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(100)
