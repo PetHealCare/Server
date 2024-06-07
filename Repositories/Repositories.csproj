@@ -10,9 +10,4 @@
     <ProjectReference Include="..\DataAccessLayers\DataAccessLayers.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Class\" />
-    <Folder Include="Interface\" />
-  </ItemGroup>
-
 </Project>
