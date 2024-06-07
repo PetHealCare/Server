@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Models;
+using DTOs.Request.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -18,53 +19,93 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult GetListService() 
         {
-            var response = _service.GetAll();
-            if (response == null)
+            try
             {
-                return NotFound();
+                var response = _service.GetAll();
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                return Ok(response);
             }
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+           
         }
 
         [HttpGet("{id}")]
         public IActionResult GetService(int id)
         {
-            var response = _service.Get(id);
-            if (response == null)
+            try
             {
-                return NotFound();
+                var response = _service.Get(id);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                return Ok(response);
             }
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+           
         }
         [HttpPost]
-        public IActionResult CreateService([FromBody] Service service)
+        public IActionResult CreateService([FromBody] ServiceRequest service)
         {
-            var response = _service.Create(service);
-            if (response == null)
+            try
             {
-                return BadRequest();
+                var response = _service.Create(service);
+                if (response == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(response);
             }
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            
         }
         [HttpPut]
-        public IActionResult UpdateService([FromBody] Service service)
+        public async Task<IActionResult> UpdateService([FromBody] ServiceRequest service)
         {
-            var response = _service.Update(service);
-            if (!response)
+            try
             {
-                return BadRequest();
+                var response = await _service.Update(service);
+                if (!response)
+                {
+                    return BadRequest();
+                }
+                return Ok(response);
             }
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+           
         }
         [HttpDelete("{id}")]
         public IActionResult DeleteService(int id)
         {
-            var response = _service.Delete(id);
-            if (!response)
+            try
             {
-                return BadRequest();
+                var response = _service.Delete(id);
+                if (!response)
+                {
+                    return BadRequest();
+                }
+                return Ok(response);
             }
-            return Ok(response);
+
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }

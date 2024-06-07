@@ -55,6 +55,42 @@ namespace DataAccessLayers
                 ToList();
         }
 
+        public SlotBooking GetSlotBooking(int id)
+        {
+            return _context.SlotBookings
+       .Where(s => s.SlotBookingId == id)
+       .Select(s => new SlotBooking
+       {
+           SlotBookingId = s.SlotBookingId,
+           DoctorId = s.DoctorId,
+           ServiceId = s.ServiceId,
+           ScheduleId = s.ScheduleId,
+           Status = s.Status,
+           Doctor = new Doctor
+           {
+               DoctorId = s.Doctor.DoctorId,
+               FullName = s.Doctor.FullName,
+               PhoneNumber = s.Doctor.PhoneNumber,
+               Email = s.Doctor.Email,
+               Speciality = s.Doctor.Speciality,
+           },
+           Schedule = new Schedule
+           {
+               ScheduleId = s.Schedule.ScheduleId,
+               StartTime = s.Schedule.StartTime,
+               EndTime = s.Schedule.EndTime,
+           },
+           Service = new Service
+           {
+               ServiceId = s.Service.ServiceId,
+               ServiceName = s.Service.ServiceName,
+               Price = s.Service.Price,
+               Description = s.Service.Description
+           }
+       })
+       .FirstOrDefault();
+        }
+
         public SlotBooking GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null)
         {
             var query = _context.SlotBookings.AsQueryable();
@@ -116,7 +152,20 @@ namespace DataAccessLayers
             await _context.SaveChangesAsync();
             return booking;
         }
-
+        public async Task<bool> Update(SlotBooking request)
+        {
+            var slotBookingInDb = await _context.SlotBookings.FindAsync(request.SlotBookingId);
+            if (slotBookingInDb == null)
+            {
+                return false;
+            }
+            slotBookingInDb.DoctorId = request.DoctorId;
+            slotBookingInDb.ServiceId = request.ServiceId;
+            slotBookingInDb.ScheduleId = request.ScheduleId;
+            slotBookingInDb.Status = request.Status;
+            _context.SlotBookings.Update(slotBookingInDb);
+            return await _context.SaveChangesAsync() > 0;
+        }
 
     }
 }

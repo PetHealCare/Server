@@ -16,13 +16,13 @@ namespace Repositories
         public Task<bool> Delete(int id);
         public Task<Schedule> Get(int id);
         public Task<List<Schedule>> GetAll();
-        Task<Schedule> Create(ScheduleRequest schedule);
+        Task<Schedule> Create(Schedule schedule);
 
 
     }
     public class ScheduleRepository : IScheduleRepository
     {
-        public async Task<Schedule> Create(ScheduleRequest schedule)
+        public async Task<Schedule> Create(Schedule schedule)
         {
             return await ScheduleDAO.Instance.Create(schedule);
         }
@@ -46,7 +46,7 @@ namespace Repositories
 
         public async Task<bool> Update(Schedule schedule)
         {
-            return ScheduleDAO.Instance.Update(schedule);
+            return await ScheduleDAO.Instance.UpdateSchedule(schedule);
         }
 
         

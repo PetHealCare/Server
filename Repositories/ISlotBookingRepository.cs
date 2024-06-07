@@ -13,8 +13,9 @@ namespace Repositories
     {
         public Task<SlotBooking> Create(SlotBookingRequest request);
         public Task<List<SlotBooking>> GetAll();
-        public SlotBooking GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null);
-        public bool Update(SlotBooking slotBooking);
+        public Task<SlotBooking> GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null);
+        public Task<bool> Update(SlotBooking slotBooking);
+        public Task<SlotBooking> GetSlotBooking(int id);
         public bool Delete(int id);
     }
 
@@ -35,14 +36,19 @@ namespace Repositories
             return SlotBookingDAO.Instance.GetListSlotBooking();
         }
 
-        public SlotBooking GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null)
+        public async Task<SlotBooking> GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null)
         {
             return SlotBookingDAO.Instance.GetListSlotBooking(doctorId, serviceId, scheduleId);
         }
 
-        public bool Update(SlotBooking slotBooking)
+        public async Task<SlotBooking> GetSlotBooking(int id)
         {
-            return SlotBookingDAO.Instance.Update(slotBooking);
+            return  SlotBookingDAO.Instance.GetSlotBooking(id);
+        }
+
+        public async Task<bool> Update(SlotBooking slotBooking)
+        {
+            return await SlotBookingDAO.Instance.Update(slotBooking);
         }
     }
 }

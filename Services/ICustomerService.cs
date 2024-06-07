@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.Models;
 using DTOs.Request.Customer;
+using DTOs.Response.Customer;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,12 @@ namespace Services
 {
     public interface ICustomerService
     {
-        public List<Customer> GetAll();
+        public List<CustomerResponse> GetAll();
         public Task<Customer> Login(LoginCustomerRequest loginCustomerRequest);
         public Task<bool> Register(RegisterRequest registerRequest);
         public Task<bool> UpdateProfile(UpdateProfileCustomerResquest customerResquest);
-        public Customer GetCustomerById(int customerId);
+        public CustomerResponse GetCustomerById(int customerId);
+        public Task<bool> UpdateCustomer(CustomerRequest request);
     }
     public class CustomerService : ICustomerService
     {
@@ -24,14 +26,41 @@ namespace Services
         {
             _repo = repo;
         }
-        public List<Customer> GetAll()
+        public List<CustomerResponse> GetAll()
         {
-            return _repo.GetAll();
+            var customers = _repo.GetAll();
+            List<CustomerResponse> customerResponses = new List<CustomerResponse>();
+            foreach (var customer in customers)
+            {
+                CustomerResponse customerResponse = new CustomerResponse();
+                customerResponse.CustomerId = customer.CustomerId;
+                customerResponse.FullName = customer.FullName;
+                customerResponse.PhoneNumber = customer.PhoneNumber;
+                customerResponse.Email = customer.Email;
+                customerResponse.Password = customer.Password;
+                customerResponse.Address = customer.Address;
+                customerResponse.Status = customer.Status;
+                customerResponses.Add(customerResponse);
+            }
+            return customerResponses;
         }
 
-        public Customer GetCustomerById(int customerId)
+        public CustomerResponse GetCustomerById(int customerId)
         {
-            return _repo.GetCustomerById(customerId);
+            var customer = _repo.GetCustomerById(customerId);
+            if (customer == null)
+            {
+                throw new Exception("Customer not found.");
+            }
+            CustomerResponse customerResponse = new CustomerResponse();
+            customerResponse.CustomerId = customer.CustomerId;
+            customerResponse.FullName = customer.FullName;
+            customerResponse.PhoneNumber = customer.PhoneNumber;
+            customerResponse.Email = customer.Email;
+            customerResponse.Password = customer.Password;
+            customerResponse.Address = customer.Address;
+            customerResponse.Status = customer.Status;
+            return customerResponse;
         }
 
         public async Task<Customer> Login(LoginCustomerRequest loginCustomerRequest)
@@ -57,6 +86,20 @@ namespace Services
             customer.Address = registerRequest.Address;
             customer.Status = true;
             return await _repo.Register(customer);
+        }
+
+        public async Task<bool> UpdateCustomer(CustomerRequest request)
+        {
+            var customer = new Customer();
+            customer.CustomerId = request.CustomerId;
+            customer.FullName = request.FullName;
+            customer.PhoneNumber = request.PhoneNumber;
+            customer.Email = request.Email;
+            customer.Password = request.Password;
+            customer.Address = request.Address;
+            customer.Status = request.Status;
+
+            return await _repo.UpdateCustomer(customer);
         }
 
         public async Task<bool> UpdateProfile(UpdateProfileCustomerResquest customerResquest)

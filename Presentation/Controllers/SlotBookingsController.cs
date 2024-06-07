@@ -28,15 +28,40 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var slotBooking = await _slotBookingService.Get(id);
+                if (slotBooking == null)
+                {
+                    return NotFound();
+                }
+                return Ok(slotBooking);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
         [HttpGet("slot")]
         public IActionResult GetListSlotBooking(int? doctorId = null, int? serviceId = null, int? scheduleId = null)
         {
-            var slotBooking = _slotBookingService.GetListSlotBooking(doctorId, serviceId, scheduleId);
-            if (slotBooking == null)
+            try
             {
-                return NotFound();
+                var slotBooking = _slotBookingService.GetListSlotBooking(doctorId, serviceId, scheduleId);
+                if (slotBooking == null)
+                {
+                    return NotFound();
+                }
+                return Ok(slotBooking);
             }
-            return Ok(slotBooking);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+           ;
         }
         [HttpPost]
         public async Task<IActionResult> Create(SlotBookingRequest request)
@@ -52,24 +77,39 @@ namespace Presentation.Controllers
             }
         }
         [HttpPut]
-        public IActionResult Update(SlotBooking slotBooking)
+        public async Task<IActionResult> Update(SlotBookingRequest slotBooking)
         {
-            var response = _slotBookingService.Update(slotBooking);
-            if (!response)
+            try
             {
-                return BadRequest();
+                var response = await _slotBookingService.Update(slotBooking);
+                if (!response)
+                {
+                    return BadRequest();
+                }
+                return Ok(response);
             }
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var response = _slotBookingService.Delete(id);
-            if (!response)
+            try
             {
-                return BadRequest();
+                var response = _slotBookingService.Delete(id);
+                if (!response)
+                {
+                    return BadRequest();
+                }
+                return Ok(response);
             }
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
     }

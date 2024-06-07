@@ -25,6 +25,7 @@ namespace DataAccessLayers
                            .FirstOrDefault(c => c.Email.Equals(loginCustomerRequest.Email) && c.Password.Equals(loginCustomerRequest.Password) && c.Status == true);
         }
 
+        
         public bool Resgiter(Customer customer)
         {
             
@@ -47,6 +48,22 @@ namespace DataAccessLayers
             customerUpdate.Password = customerResquest.Password;
             customerUpdate.Address = customerResquest.Address;
             _context.Entry(customerUpdate).State = EntityState.Modified;
+            return _context.SaveChanges() > 0;
+        }
+        public bool UpdateCustomer(Customer customer)
+        {
+            var customerUpdate = GetById(customer.CustomerId);
+            if (customerUpdate == null)
+            {
+                return false;
+            }
+            customerUpdate.FullName = customer.FullName;
+            customerUpdate.PhoneNumber = customer.PhoneNumber;
+            customerUpdate.Password = customer.Password;
+            customerUpdate.Email = customer.Email;
+            customerUpdate.Address = customer.Address;
+            customerUpdate.Status = customer.Status;
+            _context.Customers.Update(customerUpdate);
             return _context.SaveChanges() > 0;
         }
     }
