@@ -72,6 +72,8 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseCors("AllowReactApp");
 app.UseHttpsRedirection();
 
