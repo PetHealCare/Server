@@ -84,7 +84,7 @@ namespace Services.Class
 			// Update the fields
 			doctor.FullName = request.FullName ?? doctor.FullName;
 			doctor.PhoneNumber = request.PhoneNumber ?? doctor.PhoneNumber;
-			doctor.Email = request.Email ?? doctor.Email;
+			
 			doctor.Speciality = request.Speciality ?? doctor.Speciality;
 
 			// Save changes

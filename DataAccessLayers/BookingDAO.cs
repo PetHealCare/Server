@@ -1,6 +1,5 @@
 ﻿using BusinessObjects.Models;
 using DTOs;
-using DTOs.Response.SlotBooking;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,10 @@ namespace DataAccessLayers
                 BookingId = b.BookingId,
                 CustomerId = b.CustomerId,
                 PetId = b.PetId,
-                BookingDate = b.BookingDate,    
+                DoctorId = b.DoctorId,
+                ScheduleId = b.ScheduleId,
+                BookingDate = b.BookingDate,   
+                Slot = b.Slot,
                 Note = b.Note,
                 Status = b.Status,
                 Customer = new Customer
@@ -35,44 +37,56 @@ namespace DataAccessLayers
                     CustomerId = b.Customer.CustomerId,
                     FullName = b.Customer.FullName,
                     PhoneNumber = b.Customer.PhoneNumber,
-                    Email = b.Customer.Email,
-                    Address = b.Customer.Address
+                    Address = b.Customer.Address,
+                    Status = b.Customer.Status,
+                    UserId = b.Customer.UserId
                 },
                 Pet = new Pet
                 {
                     PetId = b.Pet.PetId,
                     Name = b.Pet.Name,
-                    Species = b.Pet.Species
+                    Species = b.Pet.Species,
+                    Status = b.Pet.Status,
+                    CustomerId = b.Pet.CustomerId,
+                    Age = b.Pet.Age,
+                    Gender = b.Pet.Gender,
+                    Generic = b.Pet.Generic,
+                    Description = b.Pet.Description
                 },
-                SlotBookings = b.SlotBookings.Select(sb => new SlotBooking
+                Doctor = new Doctor
                 {
-                    SlotBookingId = sb.SlotBookingId,
-                    DoctorId = sb.DoctorId,
-                    ServiceId = sb.ServiceId,
-                    ScheduleId = sb.ScheduleId,
-                    Status = sb.Status,
-                    Doctor = new Doctor
-                    {
-                        DoctorId = sb.Doctor.DoctorId,
-                        FullName = sb.Doctor.FullName,
-                        PhoneNumber = sb.Doctor.PhoneNumber,
-                        Email = sb.Doctor.Email,
-                        Speciality = sb.Doctor.Speciality
-                    },
-                    Schedule = new Schedule
-                    {
-                        ScheduleId = sb.Schedule.ScheduleId,
-                        StartTime = sb.Schedule.StartTime,
-                        EndTime = sb.Schedule.EndTime
-                    },
-                    Service = new Service
-                    {
-                        ServiceId = sb.Service.ServiceId,
-                        ServiceName = sb.Service.ServiceName,
-                        Price = sb.Service.Price,
-                        Description = sb.Service.Description
-                    }
+                    DoctorId = b.Doctor.DoctorId,
+                    FullName = b.Doctor.FullName,
+                    PhoneNumber = b.Doctor.PhoneNumber,
+                    Speciality = b.Doctor.Speciality,
+                    Status = b.Doctor.Status,
+                    UserId = b.Doctor.UserId
+
+
+                },
+                Schedule = new Schedule
+                {
+                    ScheduleId = b.Schedule.ScheduleId,
+                    DoctorId = b.Schedule.DoctorId,
+                    StartTime = b.Schedule.StartTime,
+                    EndTime = b.Schedule.EndTime,
+                    RoomNo = b.Schedule.RoomNo,
+                    SlotBooking = b.Schedule.SlotBooking,
+                    Status = b.Schedule.Status
+
+                },
+                Services = b.Services.Select(s => new Service
+                {
+                    ServiceId = s.ServiceId,
+                    ServiceName = s.ServiceName,
+                    Price = s.Price,
+                    Description = s.Description,
+                    LimitTime = s.LimitTime
+                    
+
                 }).ToList()
+
+                
                 
 
 
@@ -87,7 +101,10 @@ namespace DataAccessLayers
                 BookingId = b.BookingId,
                 CustomerId = b.CustomerId,
                 PetId = b.PetId,
+                DoctorId = b.DoctorId,
+                ScheduleId = b.ScheduleId,
                 BookingDate = b.BookingDate,
+                Slot = b.Slot,
                 Note = b.Note,
                 Status = b.Status,
                 Customer = new Customer
@@ -95,48 +112,66 @@ namespace DataAccessLayers
                     CustomerId = b.Customer.CustomerId,
                     FullName = b.Customer.FullName,
                     PhoneNumber = b.Customer.PhoneNumber,
-                    Email = b.Customer.Email,
-                    Address = b.Customer.Address
+                    Address = b.Customer.Address,
+                    Status = b.Customer.Status,
+                    UserId = b.Customer.UserId
                 },
                 Pet = new Pet
                 {
                     PetId = b.Pet.PetId,
                     Name = b.Pet.Name,
-                    Species = b.Pet.Species
+                    Species = b.Pet.Species,
+                    Status = b.Pet.Status,
+                    CustomerId = b.Pet.CustomerId,
+                    Age = b.Pet.Age,
+                    Gender =  b.Pet.Gender,
+                    Generic = b.Pet.Generic,
+                    Description = b.Pet.Description
                 },
-                SlotBookings = b.SlotBookings.Select(sb => new SlotBooking
+                Doctor = new Doctor
                 {
-                    SlotBookingId = sb.SlotBookingId,
-                    DoctorId = sb.DoctorId,
-                    ServiceId = sb.ServiceId,
-                    ScheduleId = sb.ScheduleId,
-                    Status = sb.Status,
-                    Doctor = new Doctor
-                    {
-                        DoctorId = sb.Doctor.DoctorId,
-                        FullName = sb.Doctor.FullName,
-                        PhoneNumber = sb.Doctor.PhoneNumber,
-                        Email = sb.Doctor.Email,
-                        Speciality = sb.Doctor.Speciality
-                    },
-                    Schedule = new Schedule
-                    {
-                        ScheduleId = sb.Schedule.ScheduleId,
-                        StartTime = sb.Schedule.StartTime,
-                        EndTime = sb.Schedule.EndTime
-                    },
-                    Service = new Service
-                    {
-                        ServiceId = sb.Service.ServiceId,
-                        ServiceName = sb.Service.ServiceName,
-                        Price = sb.Service.Price,
-                        Description = sb.Service.Description
-                    }
+                    DoctorId = b.Doctor.DoctorId,
+                    FullName = b.Doctor.FullName,
+                    PhoneNumber = b.Doctor.PhoneNumber,
+                    Speciality = b.Doctor.Speciality,
+                    Status = b.Doctor.Status,
+                    UserId = b.Doctor.UserId
+
+
+                },
+                Schedule = new Schedule
+                {
+                    ScheduleId = b.Schedule.ScheduleId,
+                    DoctorId = b.Schedule.DoctorId,
+                    
+                    StartTime = b.Schedule.StartTime,
+                    EndTime = b.Schedule.EndTime,
+                    RoomNo = b.Schedule.RoomNo,
+                    SlotBooking = b.Schedule.SlotBooking,
+                    Status = b.Schedule.Status
+
+                },
+                
+                Services = b.Services.Select(s => new Service
+                {
+                    ServiceId = s.ServiceId,
+                    ServiceName = s.ServiceName,
+                    Price = s.Price,
+                    Description = s.Description,
+                    LimitTime = s.LimitTime
+
+
                 }).ToList()
 
 
 
+
+
             }).FirstOrDefault();
+
+
+
+            
         }
         public async Task<bool> Update(Booking booking)
         {
@@ -167,18 +202,7 @@ namespace DataAccessLayers
             return true;
         }
 
-        public async Task<bool> LinkBookingToSlotBooking(int bookingId, int slotBookingId)
-        {
-            var booking = await _context.Bookings.FindAsync(bookingId);
-            var slotBooking = await _context.SlotBookings.FindAsync(slotBookingId);
-
-            if (booking != null && slotBooking != null)
-            {
-                booking.SlotBookings.Add(slotBooking);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            return false;
-        }
+       
 
         public async Task<bool> Delete(int bookingId)
         {

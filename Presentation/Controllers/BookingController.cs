@@ -11,12 +11,12 @@ namespace Presentation.Controllers
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _service;
-        private readonly ISlotBookingService _slotBookingService;
+       
         private readonly IScheduleService _scheduleService;
-        public BookingController(IBookingService service, ISlotBookingService slotBookingService, IScheduleService scheduleService)
+        public BookingController(IBookingService service,  IScheduleService scheduleService)
         {
             _service = service;
-            _slotBookingService = slotBookingService;
+            
             _scheduleService = scheduleService;
         }
         [HttpGet]

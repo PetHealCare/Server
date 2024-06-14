@@ -32,6 +32,7 @@ namespace Services
             var service = new Service();
             service.ServiceName = request.ServiceName;
             service.Description = request.Description;
+            service.LimitTime = request.LimitTime;
             service.Price = request.Price;
 
 
@@ -54,6 +55,7 @@ namespace Services
             serviceResponse.ServiceId = service.ServiceId;
             serviceResponse.ServiceName = service.ServiceName;
             serviceResponse.Description = service.Description;
+            serviceResponse.LimitTime = service.LimitTime;
             serviceResponse.Price = service.Price;
             return serviceResponse;
         }
@@ -68,6 +70,7 @@ namespace Services
                 serviceResponse.ServiceId = service.ServiceId;
                 serviceResponse.ServiceName = service.ServiceName;
                 serviceResponse.Description = service.Description;
+                serviceResponse.LimitTime = service.LimitTime;
                 serviceResponse.Price = service.Price;
                 serviceResponses.Add(serviceResponse);
             }
@@ -80,6 +83,7 @@ namespace Services
             service.ServiceId = request.ServiceId;
             service.ServiceName = request.ServiceName;
             service.Description = request.Description;
+            service.LimitTime = request.LimitTime;
             service.Price = request.Price;
             return await _repo.Update(service);
         }

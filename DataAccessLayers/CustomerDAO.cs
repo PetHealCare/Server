@@ -18,11 +18,11 @@ namespace DataAccessLayers
 		{
             
         }
-        public Customer Login(LoginCustomerRequest loginCustomerRequest)
+        public User Login(LoginRequest loginCustomerRequest)
         {
             // Use LINQ to find the customer with the matching email and password
-            return _context.Customers
-                           .FirstOrDefault(c => c.Email.Equals(loginCustomerRequest.Email) && c.Password.Equals(loginCustomerRequest.Password) && c.Status == true);
+            return _context.Users
+                           .FirstOrDefault(c => c.Email.Equals(loginCustomerRequest.Email) && c.Password.Equals(loginCustomerRequest.Password));
         }
 
         
@@ -45,7 +45,7 @@ namespace DataAccessLayers
             }
             customerUpdate.FullName = customerResquest.FullName;
             customerUpdate.PhoneNumber = customerResquest.PhoneNumber;
-            customerUpdate.Password = customerResquest.Password;
+            
             customerUpdate.Address = customerResquest.Address;
             _context.Entry(customerUpdate).State = EntityState.Modified;
             return _context.SaveChanges() > 0;
@@ -59,8 +59,7 @@ namespace DataAccessLayers
             }
             customerUpdate.FullName = customer.FullName;
             customerUpdate.PhoneNumber = customer.PhoneNumber;
-            customerUpdate.Password = customer.Password;
-            customerUpdate.Email = customer.Email;
+            
             customerUpdate.Address = customer.Address;
             customerUpdate.Status = customer.Status;
             _context.Customers.Update(customerUpdate);

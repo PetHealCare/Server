@@ -49,23 +49,7 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginCustomerRequest loginRequest)
-        {
-            try
-            {
-                var response = await _service.Login(loginRequest);
-                if (response == null)
-                {
-                    return NotFound();
-                }
-                return Ok(response);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+       
         [HttpPost]
         public IActionResult CreateStaff(staff staff)
         {

@@ -16,11 +16,7 @@ namespace DataAccessLayers
         {
 
         }
-        public staff Login(string email, string password)
-        {
-            return _context.staff
-                           .FirstOrDefault(c => c.Email.Equals(email) && c.Password.Equals(password));
-        }
+       
         public staff Create(staff staff)
         {
             _context.Add(staff);
@@ -36,8 +32,7 @@ namespace DataAccessLayers
             }
             staffUpdate.FullName = staff.FullName;
             staffUpdate.PhoneNumber = staff.PhoneNumber;
-            staffUpdate.Email = staff.Email;
-            staffUpdate.Password = staff.Password;
+           
           
             _context.staff.Update(staffUpdate);
             return _context.SaveChanges() > 0;

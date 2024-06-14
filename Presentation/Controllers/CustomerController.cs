@@ -53,7 +53,7 @@ namespace Presentation.Controllers
             
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginCustomerRequest loginRequest)
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             try
             {

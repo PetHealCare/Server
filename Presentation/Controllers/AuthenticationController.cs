@@ -23,18 +23,37 @@ namespace Presentation.Controllers
             _customerService = customerService;
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCustomerRequest model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
            
             var user = await _customerService.Login(model);
             if (user != null)
             {
-                var authClaims = new List<Claim>
+                var authClaims = new List<Claim>();
+                if (user.Role == 1)
                 {
-                    new Claim("Email:", user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("Role:", UserRoles.Customer)
-                };
+                   
+                
+                        authClaims.Add(new Claim("Email", user.Email));
+                        authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                        authClaims.Add(new Claim(ClaimTypes.Role, UserRoles.Staff));
+                        authClaims.Add(new Claim("Role", UserRoles.Staff));
+
+                }
+                else if (user.Role == 2)
+                {
+                    authClaims.Add(new Claim("Email", user.Email));
+                    authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                    authClaims.Add(new Claim(ClaimTypes.Role, UserRoles.Doctor));
+                    authClaims.Add(new Claim("Role", UserRoles.Doctor));
+                }
+                else if (user.Role == 3)
+                {
+                    authClaims.Add(new Claim("Email", user.Email));
+                    authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                    authClaims.Add(new Claim(ClaimTypes.Role, UserRoles.Customer));
+                    authClaims.Add(new Claim("Role", UserRoles.Customer));
+                }
                 var token = GetToken(authClaims);
 
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));

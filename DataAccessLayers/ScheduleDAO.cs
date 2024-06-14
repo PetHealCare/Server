@@ -26,9 +26,11 @@ namespace DataAccessLayers
             {
                 return false;
             }
+            scheduleUpdate.RoomNo = schedule.RoomNo;
             scheduleUpdate.StartTime = schedule.StartTime;
             scheduleUpdate.EndTime = schedule.EndTime;
             scheduleUpdate.Status = schedule.Status;
+            scheduleUpdate.SlotBooking = schedule.SlotBooking;
              _context.Schedules.Update(scheduleUpdate);
             return await _context.SaveChangesAsync() > 0;
         }

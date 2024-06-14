@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Presentation;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,8 @@ builder.Services
             ValidateAudience = true,
             ValidAudience = configuration["JWT:Audience"],
             ValidIssuer = configuration["JWT:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+            RoleClaimType = ClaimTypes.Role
         };
     });
 
@@ -40,6 +42,7 @@ builder.Services.ConfigureSwaggerGen(c =>
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
         Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+        
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
