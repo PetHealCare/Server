@@ -16,7 +16,7 @@ namespace Services
         public Task<bool> Update(staff request);
         public Task<staff> Create(staff request);
         public bool Delete(int id);
-        public Task<staff> Login(LoginCustomerRequest loginCustomerRequest);
+       
 
     }
     public class StaffService : IStaffService
@@ -47,10 +47,7 @@ namespace Services
             return _staffRepository.GetAll();
         }
 
-        public async Task<staff> Login(LoginCustomerRequest loginCustomerRequest)
-        {
-            return  _staffRepository.Login(loginCustomerRequest.Email, loginCustomerRequest.Password);
-        }
+        
 
         public async Task<bool> Update(staff request)
         {

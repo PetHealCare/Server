@@ -18,7 +18,7 @@ namespace Repositories
         public Task<bool> Update(Booking booking);
 
         public Task<Booking> GetBookingById(int booking);
-        public Task<bool> LinkBookingToSlotBooking(int bookingId, int slotBookingId);
+       
         public Task<bool> DeleteBooking(int bookingId);
     
     }
@@ -45,10 +45,7 @@ namespace Repositories
             return  await BookingDAO.Instance.GetBookingById(booking);
         }
 
-        public async Task<bool> LinkBookingToSlotBooking(int bookingId, int slotBookingId)
-        {
-            return await BookingDAO.Instance.LinkBookingToSlotBooking(bookingId, slotBookingId);
-        }
+        
 
         public async Task<bool> Update(Booking booking)
         {

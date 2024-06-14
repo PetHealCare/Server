@@ -31,8 +31,11 @@ namespace Services
         {
             var schedule = new Schedule();
             schedule.ScheduleId = request.ScheduleId;
+            schedule.DoctorId = request.DoctorId;
+            schedule.RoomNo = request.RoomNo;
             schedule.StartTime = request.StartTime;
             schedule.EndTime = request.EndTime;
+            schedule.SlotBooking = request.SlotBooking;
             schedule.Status = request.Status;
 
 
@@ -84,9 +87,12 @@ namespace Services
         {
             var schedule = new Schedule();
             schedule.ScheduleId = request.ScheduleId;
+            schedule.DoctorId = request.DoctorId;
             schedule.StartTime = request.StartTime;
             schedule.EndTime = request.EndTime;
+            schedule.RoomNo = request.RoomNo;
             schedule.Status = request.Status;
+            schedule.SlotBooking = request.SlotBooking;
             return await _scheduleRepository.Update(schedule);
         }
     }

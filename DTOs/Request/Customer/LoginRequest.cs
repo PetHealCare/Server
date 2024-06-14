@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DTOs.Request.Customer
 {
-    public class LoginCustomerRequest
+    public class LoginRequest
     {
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; } = null!;

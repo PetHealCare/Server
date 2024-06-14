@@ -7,14 +7,18 @@ namespace BusinessObjects.Models
     {
         public Schedule()
         {
-            SlotBookings = new HashSet<SlotBooking>();
+            Bookings = new HashSet<Booking>();
         }
 
         public int ScheduleId { get; set; }
+        public int DoctorId { get; set; }
+        public string? RoomNo { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public byte? SlotBooking { get; set; }
         public bool? Status { get; set; }
 
-        public virtual ICollection<SlotBooking> SlotBookings { get; set; }
+        public virtual Doctor Doctor { get; set; } = null!;
+        public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

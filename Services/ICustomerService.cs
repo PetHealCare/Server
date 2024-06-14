@@ -13,7 +13,7 @@ namespace Services
     public interface ICustomerService
     {
         public List<CustomerResponse> GetAll();
-        public Task<Customer> Login(LoginCustomerRequest loginCustomerRequest);
+        public Task<User> Login(LoginRequest loginCustomerRequest);
         public Task<bool> Register(RegisterRequest registerRequest);
         public Task<bool> UpdateProfile(UpdateProfileCustomerResquest customerResquest);
         public CustomerResponse GetCustomerById(int customerId);
@@ -36,10 +36,9 @@ namespace Services
                 customerResponse.CustomerId = customer.CustomerId;
                 customerResponse.FullName = customer.FullName;
                 customerResponse.PhoneNumber = customer.PhoneNumber;
-                customerResponse.Email = customer.Email;
-                customerResponse.Password = customer.Password;
                 customerResponse.Address = customer.Address;
                 customerResponse.Status = customer.Status;
+                customerResponse.UserId = customer.UserId;
                 customerResponses.Add(customerResponse);
             }
             return customerResponses;
@@ -56,16 +55,15 @@ namespace Services
             customerResponse.CustomerId = customer.CustomerId;
             customerResponse.FullName = customer.FullName;
             customerResponse.PhoneNumber = customer.PhoneNumber;
-            customerResponse.Email = customer.Email;
-            customerResponse.Password = customer.Password;
             customerResponse.Address = customer.Address;
             customerResponse.Status = customer.Status;
+            customerResponse.UserId = customer.UserId;
             return customerResponse;
         }
 
-        public async Task<Customer> Login(LoginCustomerRequest loginCustomerRequest)
+        public async Task<User> Login(LoginRequest loginRequest)
         {
-            return await _repo.Login(loginCustomerRequest);
+            return await _repo.Login(loginRequest);
         }
 
         public async Task<bool> Register(RegisterRequest registerRequest)
@@ -74,17 +72,22 @@ namespace Services
             {
                 throw new ArgumentException("Email and password are required.");
             }
-            if (GetAll().Any(x => x.Email.Equals(registerRequest.Email)))
-            {
-                throw new Exception("A user with this email already exists.");
-            }
+            //if (GetAll().Any(x => x.Email.Equals(registerRequest.Email)))
+            //{
+            //    throw new Exception("A user with this email already exists.");
+            //}
             Customer customer = new Customer();
             customer.FullName = registerRequest.FullName;
             customer.PhoneNumber = registerRequest.PhoneNumber;
-            customer.Email = registerRequest.Email;
-            customer.Password = registerRequest.Password;
             customer.Address = registerRequest.Address;
             customer.Status = true;
+            
+            User user = new User();
+            user.Email = registerRequest.Email;
+            user.Password = registerRequest.Password;
+            user.Role = 3;
+            var userResponse = await _repo.RegisterUser(user);
+            customer.UserId = userResponse.UserId;
             return await _repo.Register(customer);
         }
 
@@ -94,8 +97,6 @@ namespace Services
             customer.CustomerId = request.CustomerId;
             customer.FullName = request.FullName;
             customer.PhoneNumber = request.PhoneNumber;
-            customer.Email = request.Email;
-            customer.Password = request.Password;
             customer.Address = request.Address;
             customer.Status = request.Status;
 
