@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.Models;
+using DataAccessLayers;
 using DTOs.Request.Booking;
 using DTOs.Request.Schedule;
 using DTOs.Response.Booking;
@@ -24,9 +25,9 @@ namespace Services
         public Task<Booking> CreateBooking(BookingRequest booking);
         public Task<bool> UpdateStatusBooking(int bookingId);
         public Task<BookingResponse> GetBookingById(int booking);
-        public Task<bool> CreateSlotBookingAndLinkToBooking(CreateScheduleAndSlotBookingRequest createScheduleAndSlot);
         public Task<bool> UpdateBooking(BookingRequest request);
         public Task<bool> DeleteBooking(int bookingId);
+        public Task<bool> CreateBookingWithService(BookingServiceRequest request);
     }
     public class BookingService : IBookingService
     {
@@ -57,32 +58,31 @@ namespace Services
             return await _repo.CreateBooking(booking);
         }
 
-        public async Task<bool> CreateSlotBookingAndLinkToBooking(CreateScheduleAndSlotBookingRequest createScheduleAndSlot)
+        public async Task<bool> CreateBookingWithService(BookingServiceRequest request)
         {
-            var bookingResponse = _repo.GetBookingById(createScheduleAndSlot.bookingId);
-            if (bookingResponse == null)
+            if (request.ServiceIds.Count > 5)
             {
-                throw new Exception("Booking not found");
+                return false;
             }
-            Schedule scheduleRequest = new Schedule();
-            scheduleRequest.StartTime = createScheduleAndSlot.StartTime;
-            scheduleRequest.EndTime = createScheduleAndSlot.EndTime;
-            scheduleRequest.Status = true;
-            
-            var scheduleRespone = await _scheduleRepository.Create(scheduleRequest);
-            if (scheduleRespone == null)
+            var booking = new Booking();
+            booking.PetId = request.PetId;
+            booking.CustomerId = request.CustomerId;
+            booking.DoctorId = request.DoctorId;
+            booking.ScheduleId = request.ScheduleId;
+            booking.BookingDate = DateTime.Now;
+            booking.Slot = request.Slot;
+            booking.Note = request.Note;
+            booking.Status = request.Status;
+            var result = await _repo.CreateBooking(booking);
+            if(result == null)
             {
-                throw new Exception("Failed to create schedule");
+                return false;
             }
-            SlotBookingRequest slotBookingRequest = new SlotBookingRequest();
-            slotBookingRequest.DoctorId = createScheduleAndSlot.DoctorId;
-            slotBookingRequest.ServiceId = createScheduleAndSlot.ServiceId;
-            slotBookingRequest.ScheduleId = scheduleRespone.ScheduleId;
-           
-            
-            var updateStatusResponse = await _repo.UpdateStatusBooking(createScheduleAndSlot.bookingId);
-            return true;  
-         }
+
+            return true;
+        }
+
+        
 
         public Task<bool> DeleteBooking(int bookingId)
         {

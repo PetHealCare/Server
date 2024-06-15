@@ -22,9 +22,11 @@ namespace Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _repo;
-        public CustomerService(ICustomerRepository repo)
+        private readonly IUserRepository _userRepository;
+        public CustomerService(ICustomerRepository repo, IUserRepository userRepository)
         {
             _repo = repo;
+            _userRepository = userRepository;
         }
         public List<CustomerResponse> GetAll()
         {
@@ -72,10 +74,10 @@ namespace Services
             {
                 throw new ArgumentException("Email and password are required.");
             }
-            //if (GetAll().Any(x => x.Email.Equals(registerRequest.Email)))
-            //{
-            //    throw new Exception("A user with this email already exists.");
-            //}
+            if (_userRepository.GetAll().Any(x => x.Email.Equals(registerRequest.Email)))
+            {
+                throw new Exception("A user with this email already exists.");
+            }
             Customer customer = new Customer();
             customer.FullName = registerRequest.FullName;
             customer.PhoneNumber = registerRequest.PhoneNumber;
@@ -87,6 +89,10 @@ namespace Services
             user.Password = registerRequest.Password;
             user.Role = 3;
             var userResponse = await _repo.RegisterUser(user);
+            if(userResponse == null)
+            {
+                throw new Exception("Register failed.");
+            }
             customer.UserId = userResponse.UserId;
             return await _repo.Register(customer);
         }

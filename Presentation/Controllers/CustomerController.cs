@@ -74,18 +74,14 @@ namespace Presentation.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterRequest registerRequest) 
         {
-            try {
+          
                 var response = _service.Register(registerRequest);
-                if (registerRequest == null)
+                if (response == null)
                 {
                     return NotFound();
                 }
                 return Ok(response);
-            }
-          catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            
         }
         [HttpPut("UpdateProfile")]
         public async Task<IActionResult> UpdateProfile(UpdateProfileCustomerResquest customerResquest)

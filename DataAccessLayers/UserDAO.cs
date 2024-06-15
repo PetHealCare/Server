@@ -16,9 +16,11 @@ namespace DataAccessLayers
         {
 
         }
-        public User Register(User user)
+        public User Register(User request)
         {
-            return _context.Users.Add(user).Entity;
+            _context.Add(request);
+            _context.SaveChanges();
+            return request;
         }
     }
 }

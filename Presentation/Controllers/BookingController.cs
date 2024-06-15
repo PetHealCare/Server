@@ -72,24 +72,7 @@ namespace Presentation.Controllers
             }
         }
 
-        [HttpPost("create-booking-staff")]
-        public async Task<IActionResult> CreateBookingOfStaff([FromBody] CreateScheduleAndSlotBookingRequest request)
-        {
-            try
-            {
-                var Response = await _service.CreateSlotBookingAndLinkToBooking(request);
-                if (Response == false)
-                {
-                    return NotFound();
-                }
-                return Ok(Response);
-
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+       
 
         [HttpPut]
         public async Task<IActionResult> UpdateBooking(BookingRequest request)

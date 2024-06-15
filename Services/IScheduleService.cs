@@ -57,7 +57,9 @@ namespace Services
             ScheduleResponse scheduleResponse = new ScheduleResponse();
             scheduleResponse.ScheduleId = schedule.ScheduleId;
             scheduleResponse.StartTime = schedule.StartTime;
+            scheduleResponse.RoomNo = schedule.RoomNo;
             scheduleResponse.EndTime = schedule.EndTime;
+            scheduleResponse.SlotBooking = schedule.SlotBooking;
             scheduleResponse.Status = schedule.Status;
             return scheduleResponse;
            
@@ -75,8 +77,10 @@ namespace Services
             {
                 ScheduleResponse scheduleResponse = new ScheduleResponse();
                 scheduleResponse.ScheduleId = schedule.ScheduleId;
+                scheduleResponse.RoomNo = schedule.RoomNo;
                 scheduleResponse.StartTime = schedule.StartTime;
                 scheduleResponse.EndTime = schedule.EndTime;
+                scheduleResponse.SlotBooking = schedule.SlotBooking;
                 scheduleResponse.Status = schedule.Status;
                 scheduleResponses.Add(scheduleResponse);
             }

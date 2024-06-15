@@ -28,10 +28,7 @@ namespace DataAccessLayers
         
         public bool Resgiter(Customer customer)
         {
-            
-
-            
-            _context.Add(customer);
+               _context.Add(customer);
             return _context.SaveChanges() > 0;
            
         }
