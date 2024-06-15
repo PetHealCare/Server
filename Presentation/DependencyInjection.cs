@@ -73,7 +73,7 @@ namespace Presentation
 			services.AddScoped<IPetService, PetService>();
 			services.AddScoped<IStaffRepository, StaffRepository>();
 			services.AddScoped<IStaffService, StaffService>();
-
+			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IDoctorRepository, DoctorRepository>();
 			services.AddScoped<IDoctorService, DoctorService>();
 		}
