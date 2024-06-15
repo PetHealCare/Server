@@ -18,6 +18,17 @@ namespace DataAccessLayers
     {
 
     }
+        public async Task<bool> updateStatus(int id)
+        {
+            var schedule = GetById(id);
+            if (schedule == null)
+            {
+                return false;
+            }
+            schedule.Status = !schedule.Status;
+            _context.Schedules.Update(schedule);
+            return await _context.SaveChangesAsync() > 0;
+        }
     
         public async Task<bool> UpdateSchedule(Schedule schedule)
         {

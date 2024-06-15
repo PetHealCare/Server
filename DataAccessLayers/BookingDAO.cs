@@ -18,7 +18,9 @@ namespace DataAccessLayers
         {
 
         }
-       
+
+        
+
         public Task<List<Booking>> GetBookings()
         {
             return _context.Bookings.Select(b => new Booking
