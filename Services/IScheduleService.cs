@@ -15,7 +15,7 @@ namespace Services
         public Task<Schedule> Create(ScheduleRequest schedule);
         public Task<bool> Update(ScheduleRequest schedule);
         public Task<ScheduleResponse> Get(int id);
-        public Task<List<ScheduleResponse>> GetAll();
+        public Task<List<ScheduleResponse>> GetAll(GetListScheduleRequest request);
         public Task<bool> Delete(int id);
         
     }
@@ -65,9 +65,26 @@ namespace Services
            
         }
 
-        public async Task<List<ScheduleResponse>> GetAll()
+        public async Task<List<ScheduleResponse>> GetAll(GetListScheduleRequest request)
         {
-            var schedules = await _scheduleRepository.GetAll();
+            var schedulesQuery = (await _scheduleRepository.GetAll()).AsQueryable();
+
+      
+
+            if (!string.IsNullOrEmpty(request.Status.ToString()))
+            {
+                schedulesQuery = schedulesQuery.Where(p => p.Status == true);
+            }
+            if (request.DoctorId != 0)
+            {
+                schedulesQuery = schedulesQuery.Where(p => p.DoctorId == request.DoctorId);
+            }
+            if(!string.IsNullOrEmpty(request.RoomNo))
+            {
+                schedulesQuery = schedulesQuery.Where(s => s.RoomNo.Contains(request.RoomNo));
+            }
+            var schedules = schedulesQuery.ToList();
+            
             if (schedules == null)
             {
                 throw new Exception("Failed to get schedules");
@@ -77,6 +94,7 @@ namespace Services
             {
                 ScheduleResponse scheduleResponse = new ScheduleResponse();
                 scheduleResponse.ScheduleId = schedule.ScheduleId;
+                scheduleResponse.DoctorId = schedule.DoctorId;
                 scheduleResponse.RoomNo = schedule.RoomNo;
                 scheduleResponse.StartTime = schedule.StartTime;
                 scheduleResponse.EndTime = schedule.EndTime;
