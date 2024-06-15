@@ -30,11 +30,11 @@ namespace Presentation.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]GetListScheduleRequest request)
         {
             try
             {
-                var schedules = await _scheduleService.GetAll();
+                var schedules = await _scheduleService.GetAll(request);
                 return Ok(schedules);
             }
             catch (Exception ex)
