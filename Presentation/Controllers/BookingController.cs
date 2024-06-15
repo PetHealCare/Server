@@ -20,11 +20,11 @@ namespace Presentation.Controllers
             _scheduleService = scheduleService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetBookings()
+        public async Task<IActionResult> GetBookings([FromQuery]GetListBookingRequest request)
         {
             try
             {
-                var response = await _service.GetBookings();
+                var response = await _service.GetBookings(request);
                 if (response == null)
                 {
                     return NotFound();
@@ -71,8 +71,25 @@ namespace Presentation.Controllers
 
             }
         }
+        [HttpPost("create-booking-service")]
+        public async Task<IActionResult> CreateBookingService(BookingServiceRequest booking)
+        {
+            try
+            {
+                var response = await _service.CreateBookingWithService(booking);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
 
-       
+            }
+        }
+
 
         [HttpPut]
         public async Task<IActionResult> UpdateBooking(BookingRequest request)

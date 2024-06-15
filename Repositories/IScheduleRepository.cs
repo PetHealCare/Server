@@ -17,6 +17,7 @@ namespace Repositories
         public Task<Schedule> Get(int id);
         public Task<List<Schedule>> GetAll();
         Task<Schedule> Create(Schedule schedule);
+        public Task<bool> updateStatus(int id);
 
 
     }
@@ -27,7 +28,11 @@ namespace Repositories
             return await ScheduleDAO.Instance.Create(schedule);
         }
 
-       
+        public async Task<bool> updateStatus(int id)
+        {
+            return await ScheduleDAO.Instance.updateStatus(id);
+        }
+
 
         public async Task<bool> Delete(int id)
         {
