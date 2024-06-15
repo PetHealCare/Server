@@ -21,7 +21,7 @@ namespace Services
 {
     public interface IBookingService
     {
-        public Task<List<BookingResponse>> GetBookings(GetListBookingRequest request);
+        public Task<List<BookingResponse>> GetBookings();
         public Task<Booking> CreateBooking(BookingRequest booking);
         public Task<bool> UpdateStatusBooking(int bookingId);
         public Task<BookingResponse> GetBookingById(int booking);
@@ -34,16 +34,13 @@ namespace Services
         private readonly IBookingRepository _repo;
         private readonly IMapper _mapper;
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IServiceRepository _serviceRepository;
-        
 
 
-        public BookingService(IBookingRepository repo, IMapper mapper, IScheduleRepository scheduleRepository, IServiceRepository serviceRepository)
+        public BookingService(IBookingRepository repo, IMapper mapper, IScheduleRepository scheduleRepository)
         {
             _repo = repo;
             _mapper = mapper;
             _scheduleRepository = scheduleRepository;
-            _serviceRepository = serviceRepository;
             
         }
 
@@ -65,41 +62,23 @@ namespace Services
         {
             if (request.ServiceIds.Count > 5)
             {
-                throw new ArgumentException("You can only add up to 5 services per booking.");
+                return false;
             }
             var booking = new Booking();
             booking.PetId = request.PetId;
             booking.CustomerId = request.CustomerId;
             booking.DoctorId = request.DoctorId;
             booking.ScheduleId = request.ScheduleId;
-            var schedule = await _scheduleRepository.Get(request.ScheduleId);
             booking.BookingDate = DateTime.Now;
-            booking.Slot = schedule.SlotBooking;
+            booking.Slot = request.Slot;
             booking.Note = request.Note;
-            booking.Status = true;
+            booking.Status = request.Status;
             var result = await _repo.CreateBooking(booking);
-            if (result == null)
+            if(result == null)
             {
                 return false;
             }
 
-
-            foreach (var serviceId in request.ServiceIds)
-            {
-                var service =  _serviceRepository.GetById(serviceId);
-                if (service != null)
-                {
-                    result.Services.Add(service);
-                }
-                await _repo.Update(result);
-                
-            }
-            
-            var status = await _scheduleRepository.updateStatus(schedule.ScheduleId);
-            if(status == false)
-            {
-                return false;
-            }
             return true;
         }
 
@@ -185,29 +164,9 @@ namespace Services
             return booking;
         }
 
-        public async Task<List<BookingResponse>> GetBookings(GetListBookingRequest request)
+        public async Task<List<BookingResponse>> GetBookings()
         {
-            var bookings = (await _repo.GetAll()).AsQueryable();
-            if(request.PetId != 0)
-            {
-                bookings = bookings.Where(b => b.PetId == request.PetId);
-            }
-            if(request.CustomerId != 0)
-            {
-                bookings = bookings.Where(b => b.CustomerId == request.CustomerId);
-            }
-            if(request.DoctorId != 0)
-            {
-                bookings = bookings.Where(b => b.DoctorId == request.DoctorId);
-            }
-            if (request.ScheduleId != 0)
-            {
-                bookings = bookings.Where(b => b.ScheduleId == request.ScheduleId);
-            }
-            if (!string.IsNullOrEmpty(request.Status.ToString()))
-            {
-                bookings = bookings.Where(b => b.Status == request.Status);
-            }
+            var bookings = await _repo.GetAll();
             var response = new List<BookingResponse>();
             foreach (var item in bookings)
             {
