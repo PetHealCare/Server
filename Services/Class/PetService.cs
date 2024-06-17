@@ -26,13 +26,7 @@ namespace Services.Class
 
 		public async Task<PetResponse> Create(CreatePetRequest request)
 		{
-			var pet = new Pet()
-			{
-				Name = request.Name,
-				Species = request.Species,
-				Status = true,
-				CustomerId = request.CustomerId,
-			};
+			var pet = _mapper.Map<Pet>(request); ;
 
 			var petCreated = await _repo.Create(pet);
 			var response = _mapper.Map<PetResponse>(pet);
@@ -101,7 +95,9 @@ namespace Services.Class
 			// Update the fields
 			pet.Name = request.Name ?? pet.Name;
 			pet.Species = request.Species ?? pet.Species;
-			pet.CustomerId = request.CustomerId;
+			pet.Description = request.Description ?? pet.Description;
+			pet.Generic = request.Generic ?? pet.Generic;
+			pet.Age = request.Age ?? pet.Age;
 
 			// Save changes
 			await _repo.Update(pet);
