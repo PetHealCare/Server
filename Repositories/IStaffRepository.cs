@@ -15,6 +15,7 @@ namespace Repositories
         public staff Create(staff staff);
         public bool Update(staff staff);
         public bool Delete(int id);
+        public staff GetByUserId(int id);
         
     }
     public class StaffRepository : IStaffRepository
@@ -39,7 +40,10 @@ namespace Repositories
             return StaffDAO.Instance.GetAll();
         }
 
-        
+        public staff GetByUserId(int id)
+        {
+            return StaffDAO.Instance.GetStaffByUserId(id);
+        }
 
         public bool Update(staff staff)
         {

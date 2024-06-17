@@ -38,6 +38,7 @@ namespace Presentation.Controllers
                         authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
                         authClaims.Add(new Claim(ClaimTypes.Role, UserRoles.Staff));
                         authClaims.Add(new Claim("Role", UserRoles.Staff));
+                        authClaims.Add(new Claim("UserId", user.UserId.ToString()));
 
                 }
                 else if (user.Role == 2)
@@ -46,6 +47,7 @@ namespace Presentation.Controllers
                     authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
                     authClaims.Add(new Claim(ClaimTypes.Role, UserRoles.Doctor));
                     authClaims.Add(new Claim("Role", UserRoles.Doctor));
+                    authClaims.Add(new Claim("UserId", user.UserId.ToString()));
                 }
                 else if (user.Role == 3)
                 {
@@ -53,6 +55,7 @@ namespace Presentation.Controllers
                     authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
                     authClaims.Add(new Claim(ClaimTypes.Role, UserRoles.Customer));
                     authClaims.Add(new Claim("Role", UserRoles.Customer));
+                    authClaims.Add(new Claim("UserId", user.UserId.ToString()));
                 }
                 var token = GetToken(authClaims);
 

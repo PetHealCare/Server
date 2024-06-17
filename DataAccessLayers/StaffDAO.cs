@@ -16,6 +16,11 @@ namespace DataAccessLayers
         {
 
         }
+
+        public staff GetStaffByUserId(int id)
+        {
+            return _context.staff.FirstOrDefault(c => c.UserId == id);
+        }
        
         public staff Create(staff staff)
         {

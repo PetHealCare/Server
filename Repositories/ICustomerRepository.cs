@@ -18,6 +18,7 @@ namespace Repositories
         public Task<bool> UpdateProfile(UpdateProfileCustomerResquest customerResquest);
         public Customer GetCustomerById(int customerId);
         public Task<bool> UpdateCustomer(Customer customer);
+        public Customer GetCustomerByUserId(int id);
 
     }
     public class CustomerRepository : ICustomerRepository
@@ -30,6 +31,11 @@ namespace Repositories
         public Customer GetCustomerById(int customerId)
         {
             return CustomerDAO.Instance.GetById(customerId);
+        }
+
+        public Customer GetCustomerByUserId(int id)
+        {
+            return CustomerDAO.Instance.GetCustomerByUserId(id);
         }
 
         public async Task<User> Login(LoginRequest loginCustomerRequest)

@@ -32,6 +32,23 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        [HttpGet("user/{id}")]
+        public IActionResult GetStaffByUserId(int id)
+        {
+            try
+            {
+                var response = _service.GetByUserId(id);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         [HttpGet("{id}")]
         public IActionResult GetStaffById(int id)
         {
