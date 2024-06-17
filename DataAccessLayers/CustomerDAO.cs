@@ -20,9 +20,8 @@ namespace DataAccessLayers
         }
         public User Login(LoginRequest loginCustomerRequest)
         {
-            // Use LINQ to find the customer with the matching email and password
-            return _context.Users
-                           .FirstOrDefault(c => c.Email.Equals(loginCustomerRequest.Email) && c.Password.Equals(loginCustomerRequest.Password));
+            
+            return _context.Users.FirstOrDefault(c => c.Email.Equals(loginCustomerRequest.Email) && c.Password.Equals(loginCustomerRequest.Password));
         }
 
         
@@ -31,6 +30,11 @@ namespace DataAccessLayers
                _context.Add(customer);
             return _context.SaveChanges() > 0;
            
+        }
+
+        public Customer GetCustomerByUserId(int id)
+        {
+            return _context.Customers.FirstOrDefault(c => c.UserId == id);
         }
 
         public bool UpdateProfile(UpdateProfileCustomerResquest customerResquest)

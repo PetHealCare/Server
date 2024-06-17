@@ -34,6 +34,23 @@ namespace Presentation.Controllers
             }
 
         }
+        [HttpGet("user/{id}")]
+        public IActionResult GetCustomerByUserId(int id)
+        {
+            try
+            {
+                var response = _service.GetCustomerByUserId(id);
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         [HttpGet("{id}")]
         public IActionResult GetCustomerById(int id)
         {

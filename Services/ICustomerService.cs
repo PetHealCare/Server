@@ -18,6 +18,7 @@ namespace Services
         public Task<bool> UpdateProfile(UpdateProfileCustomerResquest customerResquest);
         public CustomerResponse GetCustomerById(int customerId);
         public Task<bool> UpdateCustomer(CustomerRequest request);
+        public CustomerResponse GetCustomerByUserId(int userId);
     }
     public class CustomerService : ICustomerService
     {
@@ -49,6 +50,23 @@ namespace Services
         public CustomerResponse GetCustomerById(int customerId)
         {
             var customer = _repo.GetCustomerById(customerId);
+            if (customer == null)
+            {
+                throw new Exception("Customer not found.");
+            }
+            CustomerResponse customerResponse = new CustomerResponse();
+            customerResponse.CustomerId = customer.CustomerId;
+            customerResponse.FullName = customer.FullName;
+            customerResponse.PhoneNumber = customer.PhoneNumber;
+            customerResponse.Address = customer.Address;
+            customerResponse.Status = customer.Status;
+            customerResponse.UserId = customer.UserId;
+            return customerResponse;
+        }
+
+        public CustomerResponse GetCustomerByUserId(int userId)
+        {
+           var customer =  _repo.GetCustomerByUserId(userId);
             if (customer == null)
             {
                 throw new Exception("Customer not found.");
