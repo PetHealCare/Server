@@ -53,7 +53,7 @@ namespace Services
             booking.CustomerId = request.CustomerId;
             booking.DoctorId = request.DoctorId;
             booking.ScheduleId = request.ScheduleId;
-            booking.BookingDate = DateTime.Now;
+            booking.BookingDate = request.BookingDate;
             booking.Slot = request.Slot;
             booking.Note = request.Note;
             booking.Status = request.Status;
