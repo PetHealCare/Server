@@ -27,7 +27,7 @@ namespace Services.Class
 		public async Task<PetResponse> Create(CreatePetRequest request)
 		{
 			var pet = _mapper.Map<Pet>(request); ;
-
+			pet.Status = true;
 			var petCreated = await _repo.Create(pet);
 			var response = _mapper.Map<PetResponse>(pet);
 			return response;
@@ -36,7 +36,7 @@ namespace Services.Class
 		public async Task<bool> Delete(int id)
 		{
 			var petToDelete = await _repo.GetPetById(id);
-			if (petToDelete == null)
+			if (petToDelete == null || petToDelete.Status == false)
 			{
 				return false;
 			}
