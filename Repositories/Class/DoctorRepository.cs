@@ -13,9 +13,9 @@ namespace Repositories.Class
 	{
 		public async Task<Doctor> Create(Doctor request) => DoctorDAO.Instance.Create(request);
 
-		public async Task<IList<Doctor>> GetList() => DoctorDAO.Instance.GetAll();
+		public async Task<IList<Doctor>> GetList(string includeProperties = "") => DoctorDAO.Instance.GetAll(includeProperties);
 
-		public async Task<Doctor> GetDoctorById(int id) => DoctorDAO.Instance.GetById(id);
+		public async Task<Doctor> GetDoctorById(int id, string includeProperties = "") => DoctorDAO.Instance.GetById(id, includeProperties);
 
 		public async Task<Doctor> Update(Doctor request) => DoctorDAO.Instance.UpdateNew(request);
 	}
