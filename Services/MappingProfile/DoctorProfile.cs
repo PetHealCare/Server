@@ -21,7 +21,6 @@ namespace Services.MappingProfile
 			CreateMap<UpdateDoctorRequest, Doctor>();
 			CreateMap<BusinessObjects.Models.Service, ServiceResponse>();
 			CreateMap<Doctor, DoctorResponse>();
-			//.ForMember(dest => dest.ServiceList, opt => opt.MapFrom(src => src.Services));
 		}
 	}
 }
