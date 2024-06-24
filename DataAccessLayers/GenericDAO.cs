@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DataAccessLayers
 {
@@ -27,14 +28,38 @@ namespace DataAccessLayers
 			return null;
 		}
 
-		public T GetById(int id)
+		public T GetById(int id, string includeProperties = "")
 		{
-			return _context.Set<T>().Find(id);
+			IQueryable<T> query = _context.Set<T>();
+
+			foreach (var includeProperty in includeProperties.Split
+				(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+			{
+				query = query.Include(includeProperty);
+			}
+
+			var entityType = typeof(T);
+			var keyProperty = _context.Model.FindEntityType(entityType)?.FindPrimaryKey()?.Properties.FirstOrDefault();
+
+			if (keyProperty == null)
+				throw new InvalidOperationException("No primary key defined for this entity.");
+
+			var keyName = keyProperty.Name;
+
+			return query.SingleOrDefault(entity => EF.Property<int>(entity, keyName) == id);
 		}
 
-		public List<T> GetAll()
+
+
+		public List<T> GetAll(string includeProperties = "")
 		{
-			return _context.Set<T>().ToList();
+			IQueryable<T> query = _context.Set<T>();
+			foreach (var includeProperty in includeProperties.Split
+				(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+			{
+				query = query.Include(includeProperty);
+			}
+			return query.ToList();
 		}
 
 		public bool Update(T entity)

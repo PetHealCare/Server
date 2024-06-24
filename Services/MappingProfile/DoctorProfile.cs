@@ -8,6 +8,7 @@ using BusinessObjects.Models;
 using DTOs.Request.Doctor;
 using DTOs.Request.User;
 using DTOs.Response.Doctor;
+using DTOs.Response.Service;
 
 namespace Services.MappingProfile
 {
@@ -18,7 +19,9 @@ namespace Services.MappingProfile
 			CreateMap<CreateDoctorRequest, Doctor>();
 			CreateMap<CreateUserRequest, User>();
 			CreateMap<UpdateDoctorRequest, Doctor>();
+			CreateMap<BusinessObjects.Models.Service, ServiceResponse>();
 			CreateMap<Doctor, DoctorResponse>();
+			//.ForMember(dest => dest.ServiceList, opt => opt.MapFrom(src => src.Services));
 		}
-    }
+	}
 }

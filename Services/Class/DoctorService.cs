@@ -9,6 +9,7 @@ using DataAccessLayers;
 using DTOs;
 using DTOs.Request.Doctor;
 using DTOs.Response.Doctor;
+using DTOs.Response.Service;
 using Repositories;
 using Repositories.Interface;
 using Services.Extentions.Paginate;
@@ -56,19 +57,24 @@ namespace Services.Class
 
 		public async Task<DoctorResponse> GetById(int id)
 		{
-			var doctor = await _repo.GetDoctorById(id);
+			var doctor = await _repo.GetDoctorById(id, includeProperties: "Services");
 			if (doctor.Status == false)
 			{
 				return null;
 			}
-			var response = _mapper.Map<DoctorResponse>(doctor);
-			return response;
+			var doctorResponse = _mapper.Map<DoctorResponse>(doctor);
+			doctorResponse.ServiceList = doctor.Services.Select(doctorService =>
+			{
+				var serviceResponse = _mapper.Map<ServiceResponse>(doctorService);
+				return serviceResponse;
+			}).ToList();
+			return doctorResponse;
 		}
 
 		public async Task<PaginatedList<DoctorResponse>> GetList(GetListDoctorRequest request)
 		{
 			var response = new PaginatedList<DoctorResponse>();
-			var doctorsQuery = (await _repo.GetList()).AsQueryable();
+			var doctorsQuery = (await _repo.GetList(includeProperties: "Services")).AsQueryable();
 
 			//filter doctor has not been deleted
 			doctorsQuery = doctorsQuery.Where(p => p.Status == true);
@@ -79,9 +85,22 @@ namespace Services.Class
 			}
 
 			var filterredDoctors = doctorsQuery.ToList();
-			var mapperList = _mapper.Map<IList<DoctorResponse>>(filterredDoctors);
-			response = await mapperList.ToPaginateAsync(request);
-			return response;
+
+			var doctorResponses = filterredDoctors.Select(doctor =>
+			{
+				var doctorResponse = _mapper.Map<DoctorResponse>(doctor);
+
+				// Map DoctorDetails to DoctorDetailResponse and include Product information
+				doctorResponse.ServiceList = doctor.Services.Select(doctorService =>
+				{
+					var serviceResponse = _mapper.Map<ServiceResponse>(doctorService);
+					return serviceResponse;
+				}).ToList();
+
+				return doctorResponse;
+			});
+
+			return await doctorResponses.ToPaginateAsync(request);
 		}
 
 		public async Task<DoctorResponse> Update(UpdateDoctorRequest request)
