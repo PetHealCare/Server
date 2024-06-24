@@ -9,6 +9,7 @@ using DataAccessLayers;
 using DTOs;
 using DTOs.Request.Doctor;
 using DTOs.Response.Doctor;
+using Repositories;
 using Repositories.Interface;
 using Services.Extentions.Paginate;
 using Services.Interface;
@@ -18,11 +19,13 @@ namespace Services.Class
 	public class DoctorService : IDoctorService
 	{
 		private readonly IDoctorRepository _repo;
-
+		private readonly IUserRepository _userRepo;
 		private readonly IMapper _mapper;
-		public DoctorService(IDoctorRepository repo, IMapper mapper)
+
+		public DoctorService(IDoctorRepository repo, IUserRepository userRepo, IMapper mapper)
 		{
 			_repo = repo;
+			_userRepo = userRepo;
 			_mapper = mapper;
 		}
 
@@ -30,7 +33,7 @@ namespace Services.Class
 		{
 			var user = _mapper.Map<User>(request);
 			user.Role = (int)RoleEnum.Doctor;
-			var userCreated = UserDAO.Instance.Create(user);
+			var userCreated = await _userRepo.Create(user);
 			var doctor = _mapper.Map<Doctor>(request);
 			doctor.UserId = userCreated.UserId;
 			doctor.Status = true;
@@ -89,10 +92,16 @@ namespace Services.Class
 				return null; // or throw an exception, based on your error handling strategy
 			}
 
+			if (!string.IsNullOrEmpty(request.Password))
+			{
+				var user = await _userRepo.GetUserById(doctor.UserId);
+				user.Password = request.Password;
+				UserDAO.Instance.Update(user);
+			}
+
 			// Update the fields
 			doctor.FullName = request.FullName ?? doctor.FullName;
 			doctor.PhoneNumber = request.PhoneNumber ?? doctor.PhoneNumber;
-			
 			doctor.Speciality = request.Speciality ?? doctor.Speciality;
 
 			// Save changes
