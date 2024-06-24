@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Models;
+using DTOs;
 using DTOs.Request.Customer;
 using DTOs.Response.Customer;
 using Repositories;
@@ -92,7 +93,7 @@ namespace Services
             {
                 throw new ArgumentException("Email and password are required.");
             }
-            if (_userRepository.GetAll().Any(x => x.Email.Equals(registerRequest.Email)))
+            if ((await _userRepository.GetList()).Any(x => x.Email.Equals(registerRequest.Email)))
             {
                 throw new Exception("A user with this email already exists.");
             }
@@ -105,7 +106,7 @@ namespace Services
             User user = new User();
             user.Email = registerRequest.Email;
             user.Password = registerRequest.Password;
-            user.Role = 3;
+            user.Role = (int)RoleEnum.Customer;
             var userResponse = await _repo.RegisterUser(user);
             if(userResponse == null)
             {

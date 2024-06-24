@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BusinessObjects.Models;
+using DataAccessLayers;
+using DTOs;
 using DTOs.Request.Doctor;
 using DTOs.Response.Doctor;
 using Repositories.Interface;
@@ -16,6 +18,7 @@ namespace Services.Class
 	public class DoctorService : IDoctorService
 	{
 		private readonly IDoctorRepository _repo;
+
 		private readonly IMapper _mapper;
 		public DoctorService(IDoctorRepository repo, IMapper mapper)
 		{
@@ -25,7 +28,12 @@ namespace Services.Class
 
 		public async Task<DoctorResponse> Create(CreateDoctorRequest request)
 		{
+			var user = _mapper.Map<User>(request);
+			user.Role = (int)RoleEnum.Doctor;
+			var userCreated = UserDAO.Instance.Create(user);
 			var doctor = _mapper.Map<Doctor>(request);
+			doctor.UserId = userCreated.UserId;
+			doctor.Status = true;
 			var doctorCreated = await _repo.Create(doctor);
 			var response = _mapper.Map<DoctorResponse>(doctor);
 			return response;
