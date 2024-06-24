@@ -1,10 +1,15 @@
 using BusinessObjects.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Presentation;
+using Services.Class;
+using Services;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.OData;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -62,7 +67,7 @@ builder.Services.ConfigureSwaggerGen(c =>
         }
     });
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddOData(opt => opt.Filter().Select().Expand().OrderBy().SetMaxTop(100).Count()); ;
 builder.Services.AddPackage();
 builder.Services.AddMasterServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
