@@ -13,5 +13,6 @@ namespace Repositories.Interface
 		public Task<Doctor> Update(Doctor request);
 		public Task<Doctor> GetDoctorById(int id, string includeProperties = "");
 		public Task<IList<Doctor>> GetList(string includeProperties = "");
+		public Task<Doctor> GetDoctorByUserId(int id);
 	}
 }

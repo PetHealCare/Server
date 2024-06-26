@@ -71,6 +71,22 @@ namespace Services.Class
 			return doctorResponse;
 		}
 
+		public async Task<DoctorResponse> GetByUserId(int userId)
+		{
+			var doctor = await _repo.GetDoctorByUserId(userId);
+			if (doctor.Status == false)
+			{
+				return null;
+			}
+			var doctorResponse = _mapper.Map<DoctorResponse>(doctor);
+			doctorResponse.ServiceList = doctor.Services.Select(doctorService =>
+			{
+				var serviceResponse = _mapper.Map<ServiceResponse>(doctorService);
+				return serviceResponse;
+			}).ToList();
+			return doctorResponse;
+		}
+
 		public async Task<PaginatedList<DoctorResponse>> GetList(GetListDoctorRequest request)
 		{
 			var response = new PaginatedList<DoctorResponse>();
