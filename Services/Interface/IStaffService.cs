@@ -17,6 +17,7 @@ namespace Services.Interface
 		Task<StaffResponse> Create(CreateStaffRequest request);
 		Task<StaffResponse> Update(UpdateStaffRequest request);
 		Task<StaffResponse> GetById(int id);
+		Task<StaffResponse> GetByUserId(int userId);
 		Task<PaginatedList<StaffResponse>> GetList(GetListStaffRequest request);
 		Task<bool> Delete(int id);
 	}
