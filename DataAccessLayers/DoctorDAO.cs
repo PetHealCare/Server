@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayers
 {
@@ -15,6 +16,13 @@ namespace DataAccessLayers
 		public DoctorDAO(PetHealthCareContext context) : base(context)
 		{
 
+		}
+
+		public Doctor GetDoctorByUserId(int id)
+		{
+			return _context.Doctors
+				.Include(d => d.Services)
+				.FirstOrDefault(d => d.UserId == id);
 		}
 	}
 }

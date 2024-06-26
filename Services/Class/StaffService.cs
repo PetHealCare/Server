@@ -58,6 +58,17 @@ namespace Services.Class
 			return staffResponse;
 		}
 
+		public async Task<StaffResponse> GetByUserId(int userId)
+		{
+			var staff = _repo.Get(userId);
+			if (staff == null)
+			{
+				return null;
+			}
+			var staffResponse = _mapper.Map<StaffResponse>(staff);
+			return staffResponse;
+		}
+
 		public async Task<PaginatedList<StaffResponse>> GetList(GetListStaffRequest request)
 		{
 			var response = new PaginatedList<StaffResponse>();

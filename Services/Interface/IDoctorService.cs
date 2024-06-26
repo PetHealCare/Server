@@ -14,6 +14,7 @@ namespace Services.Interface
 		Task<DoctorResponse> Create(CreateDoctorRequest request);
 		Task<DoctorResponse> Update(UpdateDoctorRequest request);
 		Task<DoctorResponse> GetById(int id);
+		Task<DoctorResponse> GetByUserId(int userId);
 		Task<PaginatedList<DoctorResponse>> GetList(GetListDoctorRequest request);
 		Task<bool> Delete(int id);
 	}

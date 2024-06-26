@@ -60,6 +60,25 @@ namespace Presentation.Controllers
 		}
 
 		/// <summary>
+		/// Get doctor by userId
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[ProducesResponseType(typeof(PetHealthCareResponse<DoctorResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status404NotFound)]
+		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status500InternalServerError)]
+		[HttpGet("user/{id}")]
+		public async Task<IActionResult> GetByUserId(int id)
+		{
+			var doctor = await _service.GetById(id);
+			if (doctor == null)
+			{
+				return NotFound(new PetHealthCareResponse<DoctorResponse>(false, "Doctor not found", null));
+			}
+			return Ok(new PetHealthCareResponse<DoctorResponse>(true, "Doctor retrieved successfully", doctor));
+		}
+
+		/// <summary>
 		/// Create a doctor
 		/// </summary>
 		/// <param name="request"></param>

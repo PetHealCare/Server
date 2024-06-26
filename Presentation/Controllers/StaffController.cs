@@ -60,6 +60,25 @@ namespace Presentation.Controllers
 		}
 
 		/// <summary>
+		/// Get staff by user id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[ProducesResponseType(typeof(PetHealthCareResponse<StaffResponse>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status404NotFound)]
+		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status500InternalServerError)]
+		[HttpGet("user/{id}")]
+		public async Task<IActionResult> GetByUserId(int id)
+		{
+			var staff = await _service.GetByUserId(id);
+			if (staff == null)
+			{
+				return NotFound(new PetHealthCareResponse<StaffResponse>(false, "Staff not found", null));
+			}
+			return Ok(new PetHealthCareResponse<StaffResponse>(true, "Staff retrieved successfully", staff));
+		}
+
+		/// <summary>
 		/// Create a staff
 		/// </summary>
 		/// <param name="request"></param>
