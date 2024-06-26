@@ -70,7 +70,7 @@ namespace Presentation.Controllers
 		[HttpGet("user/{id}")]
 		public async Task<IActionResult> GetByUserId(int id)
 		{
-			var doctor = await _service.GetById(id);
+			var doctor = await _service.GetByUserId(id);
 			if (doctor == null)
 			{
 				return NotFound(new PetHealthCareResponse<DoctorResponse>(false, "Doctor not found", null));
