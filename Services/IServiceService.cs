@@ -1,7 +1,9 @@
-﻿using BusinessObjects.Models;
+﻿using AutoMapper;
+using BusinessObjects.Models;
 using DTOs.Request.Service;
 using DTOs.Response.Service;
 using Repositories;
+using Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace Services
     {
         public List<ServiceResponse> GetAll();
         public ServiceResponse Get(int id);
-        public Service Create(ServiceRequest service);
+        public Task<ServiceResponse> Create(ServiceRequest service);
         public Task<bool> Update(ServiceRequest service);
         public bool Delete(int id);
         
@@ -22,21 +24,28 @@ namespace Services
     public class ServiceService : IServiceService
     {
         private readonly IServiceRepository _repo;
-        public ServiceService(IServiceRepository repo)
-        {
-            _repo = repo;
-        }
+        private readonly IDoctorRepository _doctorRepo;
+        private readonly IMapper _mapper;
 
-        public  Service Create(ServiceRequest request)
+		public ServiceService(IServiceRepository repo, IDoctorRepository doctorRepo, IMapper mapper)
+		{
+			_repo = repo;
+			_doctorRepo = doctorRepo;
+			_mapper = mapper;
+		}
+
+		public async Task<ServiceResponse> Create(ServiceRequest request)
         {
+            var doctor = await _doctorRepo.GetDoctorById(request.DoctorId);
             var service = new Service();
             service.ServiceName = request.ServiceName;
             service.Description = request.Description;
             service.LimitTime = request.LimitTime;
             service.Price = request.Price;
 
+            doctor.Services.Add(service);
 
-            return  _repo.Create(service);
+            return  _mapper.Map<ServiceResponse>(service);
         }
 
         public bool Delete(int id)

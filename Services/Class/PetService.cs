@@ -8,6 +8,7 @@ using BusinessObjects.Models;
 using DTOs.Request;
 using DTOs.Request.Pet;
 using DTOs.Response.Pet;
+using Presentation.Client;
 using Repositories.Interface;
 using Services.Extentions.Paginate;
 using Services.Interface;
@@ -18,10 +19,13 @@ namespace Services.Class
 	{
 		private readonly IPetRepository _repo;
 		private readonly IMapper _mapper;
-		public PetService(IPetRepository repo, IMapper mapper)
+		private readonly OdataClient _odataClient;
+
+		public PetService(IPetRepository repo, IMapper mapper, OdataClient odataClient)
 		{
 			_repo = repo;
 			_mapper = mapper;
+			_odataClient = odataClient;
 		}
 
 		public async Task<PetResponse> Create(CreatePetRequest request)
@@ -47,19 +51,13 @@ namespace Services.Class
 
 		public async Task<PetResponse> GetById(int id)
 		{
-			var pet = await _repo.GetPetById(id);
-			if (pet.Status == false)
-			{
-				return null;
-			}
-			var response = _mapper.Map<PetResponse>(pet);
-			return response;
+			return await _odataClient.GetPetByIdAsync(id);
 		}
 
 		public async Task<PaginatedList<PetResponse>> GetList(GetListPetRequest request)
 		{
 			var response = new PaginatedList<PetResponse>();
-			var petsQuery = (await _repo.GetList()).AsQueryable();
+			var petsQuery = (await _odataClient.GetPetsAsync()).AsQueryable();
 
 			//filter pet has not been deleted
 			petsQuery = petsQuery.Where(p => p.Status == true);
@@ -79,8 +77,7 @@ namespace Services.Class
 				petsQuery = petsQuery.Where(p => p.CustomerId == request.CustomerId);
 			}
 			var filterredPets = petsQuery.ToList();
-			var mapperList = _mapper.Map<IList<PetResponse>>(filterredPets);
-			response = await mapperList.ToPaginateAsync(request);
+			response = await filterredPets.ToPaginateAsync(request);
 			return response;
 		}
 
@@ -106,6 +103,5 @@ namespace Services.Class
 			var response = _mapper.Map<PetResponse>(pet);
 			return response;
 		}
-
 	}
 }

@@ -1,8 +1,11 @@
 ﻿using BusinessObjects.Models;
 using DTOs.Request.Service;
+using DTOs.Response.Pet;
+using DTOs.Response.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Extentions;
 
 namespace Presentation.Controllers
 {
@@ -54,23 +57,19 @@ namespace Presentation.Controllers
            
         }
         [HttpPost]
-        public IActionResult CreateService([FromBody] ServiceRequest service)
+        public async Task<IActionResult> CreateService([FromBody] ServiceRequest service)
         {
-            try
-            {
-                var response = _service.Create(service);
-                if (response == null)
-                {
-                    return BadRequest();
-                }
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-            
-        }
+
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(new PetHealthCareResponse<PetResponse>(false, "Invalid data", null));
+			}
+
+			var response = await _service.Create(service);
+			return CreatedAtAction(nameof(GetService), new { id = response.ServiceId }, new PetHealthCareResponse<ServiceResponse>(true, "Service created successfully", response));
+
+
+		}
         [HttpPut]
         public async Task<IActionResult> UpdateService([FromBody] ServiceRequest service)
         {

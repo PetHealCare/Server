@@ -1,15 +1,13 @@
 using BusinessObjects.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OData.Edm;
-using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Presentation;
 using Services.Class;
 using Services;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.OData;
+using Services.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -67,11 +65,13 @@ builder.Services.ConfigureSwaggerGen(c =>
         }
     });
 });
-builder.Services.AddControllers().AddOData(opt => opt.Filter().Select().Expand().OrderBy().SetMaxTop(100).Count()); ;
+builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 builder.Services.AddPackage();
 builder.Services.AddMasterServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.Configure<OdataSettings>(builder.Configuration.GetSection("OdataSettings"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -79,8 +79,14 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
+	app.UseDeveloperExceptionPage();
 }
+app.UseRouting();
 
+app.UseEndpoints(endpoints =>
+{
+	endpoints.MapControllers();
+});
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseCors("AllowReactApp");
 app.UseHttpsRedirection();
