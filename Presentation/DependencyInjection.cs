@@ -2,6 +2,7 @@
 using BusinessObjects.Models;
 using DataAccessLayers;
 using Microsoft.OpenApi.Models;
+using Presentation.Client;
 using Repositories;
 using Repositories.Class;
 using Repositories.Interface;
@@ -76,6 +77,8 @@ namespace Presentation
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IDoctorRepository, DoctorRepository>();
 			services.AddScoped<IDoctorService, DoctorService>();
+			services.AddScoped<OdataClient>();
+
 		}
 	}
 
