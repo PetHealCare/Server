@@ -81,18 +81,21 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 	app.UseDeveloperExceptionPage();
 }
+else
+{
+	app.UseHsts();
+}
+app.UseCors("AllowReactApp");
+
 app.UseRouting();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
 	endpoints.MapControllers();
 });
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseCors("AllowReactApp");
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
