@@ -29,7 +29,7 @@ namespace Presentation
                 options.AddPolicy("AllowReactApp",
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000") // Update with your React app URL
+                        builder.WithOrigins("http://localhost:3000", "http://localhost:5001", "http://localhost:5000") // Update with your React app URL
                                .AllowAnyHeader()
                                .AllowAnyMethod()
                                .AllowCredentials();
