@@ -8,6 +8,7 @@ using Services;
 using System.Security.Claims;
 using System.Text;
 using Services.Client;
+using Net.payOS;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -33,6 +34,11 @@ builder.Services
             RoleClaimType = ClaimTypes.Role
         };
     });
+//PayOS
+PayOS payOS = new PayOS(configuration["Environment:PAYOS_CLIENT_ID"] ?? throw new Exception("Cannot find environment"),
+                    configuration["Environment:PAYOS_API_KEY"] ?? throw new Exception("Cannot find environment"),
+                    configuration["Environment:PAYOS_CHECKSUM_KEY"] ?? throw new Exception("Cannot find environment"));
+builder.Services.AddSingleton(payOS);
 
 // Config JWT for swagger
 builder.Services.ConfigureSwaggerGen(c =>

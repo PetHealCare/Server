@@ -77,6 +77,10 @@ namespace Presentation
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IDoctorRepository, DoctorRepository>();
 			services.AddScoped<IDoctorService, DoctorService>();
+			services.AddScoped<IBillRepository, BillRepository>();
+			services.AddScoped<IBillService, BillService>();
+			services.AddScoped<IPaymentRepository, PaymentRepository>();
+			services.AddScoped<IPaymentService, PaymentService>();
 			services.AddScoped<OdataClient>();
 
 		}
