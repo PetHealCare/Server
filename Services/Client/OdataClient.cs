@@ -4,6 +4,7 @@ using BusinessObjects.Models;
 using DTOs.Response.Doctor;
 using DTOs.Response.Pet;
 using DTOs.Response.Schedule;
+using DTOs.Response.Staff;
 using Microsoft.Extensions.Options;
 using Services.Client;
 
@@ -54,6 +55,18 @@ namespace Presentation.Client
 		{
 			var url = $"{_settings.BaseUrl}{_settings.ScheduleEndpoint}/{id}";
 			return await _httpClient.GetFromJsonAsync<ScheduleResponse>(url);
+		}
+
+		public async Task<List<StaffResponse>> GetStaffAsync()
+		{
+			var url = $"{_settings.BaseUrl}{_settings.StaffEndpoint}";
+			return await _httpClient.GetFromJsonAsync<List<StaffResponse>>(url);
+		}
+
+		public async Task<StaffResponse> GetStaffByIdAsync(int id)
+		{
+			var url = $"{_settings.BaseUrl}{_settings.StaffEndpoint}/{id}";
+			return await _httpClient.GetFromJsonAsync<StaffResponse>(url);
 		}
 	}
 }

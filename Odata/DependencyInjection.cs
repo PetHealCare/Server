@@ -35,6 +35,9 @@ namespace Odata
 
 			services.AddScoped<IScheduleService, ScheduleService>();
 			services.AddScoped<IScheduleRepository, ScheduleRepository>();
+
+			services.AddScoped<IStaffService, StaffService>();
+			services.AddScoped<IStaffRepository, StaffRepository>();
 		}
 	}
 }

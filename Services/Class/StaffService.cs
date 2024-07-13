@@ -14,6 +14,7 @@ using Repositories.Interface;
 using Repositories;
 using Services.Extentions.Paginate;
 using Services.Interface;
+using Presentation.Client;
 
 namespace Services.Class
 {
@@ -22,12 +23,14 @@ namespace Services.Class
 		private readonly IStaffRepository _repo;
 		private readonly IUserRepository _userRepo;
 		private readonly IMapper _mapper;
+		private readonly OdataClient _odataClient;
 
-		public StaffService(IStaffRepository repo, IUserRepository userRepo, IMapper mapper)
+		public StaffService(IStaffRepository repo, IUserRepository userRepo, IMapper mapper, OdataClient odataClient)
 		{
 			_repo = repo;
 			_userRepo = userRepo;
 			_mapper = mapper;
+			_odataClient = odataClient;
 		}
 
 		public async Task<StaffResponse> Create(CreateStaffRequest request)
@@ -49,7 +52,7 @@ namespace Services.Class
 
 		public async Task<StaffResponse> GetById(int id)
 		{
-			var staff = _repo.Get(id);
+			var staff = await _odataClient.GetStaffByIdAsync(id);
 			if(staff == null)
 			{
 				return null;
@@ -72,7 +75,7 @@ namespace Services.Class
 		public async Task<PaginatedList<StaffResponse>> GetList(GetListStaffRequest request)
 		{
 			var response = new PaginatedList<StaffResponse>();
-			var staffsQuery = ( _repo.GetAll()).AsQueryable();
+			var staffsQuery = ( await _odataClient.GetStaffAsync()).AsQueryable();
 
 
 			if (!string.IsNullOrEmpty(request.FullName))
@@ -82,9 +85,7 @@ namespace Services.Class
 
 			var filterredStaffs = staffsQuery.ToList();
 
-			var staffResponses = _mapper.Map<List<StaffResponse>>(filterredStaffs);
-
-			return await staffResponses.ToPaginateAsync(request);
+			return await filterredStaffs.ToPaginateAsync(request);
 		}
 
 		public async Task<StaffResponse> Update(UpdateStaffRequest request)
