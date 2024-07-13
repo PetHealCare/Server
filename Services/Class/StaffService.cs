@@ -15,6 +15,7 @@ using Repositories;
 using Services.Extentions.Paginate;
 using Services.Interface;
 using Presentation.Client;
+using DTOs.Request.Customer;
 
 namespace Services.Class
 {
@@ -37,6 +38,7 @@ namespace Services.Class
 		{
 			var user = _mapper.Map<User>(request);
 			user.Role = (int)RoleEnum.Staff;
+			user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 			var userCreated = await _userRepo.Create(user);
 			var staff = _mapper.Map<staff>(request);
 			staff.UserId = userCreated.UserId;
@@ -99,7 +101,7 @@ namespace Services.Class
 			if (!string.IsNullOrEmpty(request.Password))
 			{
 				var user = await _userRepo.GetUserById(staff.UserId);
-				user.Password = request.Password;
+				user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 				UserDAO.Instance.Update(user);
 			}
 
