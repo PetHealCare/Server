@@ -1,6 +1,7 @@
 ﻿using BusinessObjects.Models;
 using DTOs.Request.Schedule;
 using DTOs.Response.Schedule;
+using Presentation.Client;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,15 @@ namespace Services
     public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository _scheduleRepository;
-        public ScheduleService(IScheduleRepository scheduleRepository)
-        {
-            _scheduleRepository = scheduleRepository;
-        }
+        private readonly OdataClient _odataClient;
 
-        public async Task<Schedule> Create(ScheduleRequest request)
+		public ScheduleService(IScheduleRepository scheduleRepository, OdataClient odataClient)
+		{
+			_scheduleRepository = scheduleRepository;
+			_odataClient = odataClient;
+		}
+
+		public async Task<Schedule> Create(ScheduleRequest request)
         {
             var schedule = new Schedule();
             schedule.ScheduleId = request.ScheduleId;
@@ -49,25 +53,18 @@ namespace Services
 
         public async Task<ScheduleResponse> Get(int id)
         {
-            var schedule = await _scheduleRepository.Get(id);
+            var schedule = await _odataClient.GetScheduleByIdAsync(id);
             if (schedule == null)
             {
                 throw new Exception("Schedule not found");
             }
-            ScheduleResponse scheduleResponse = new ScheduleResponse();
-            scheduleResponse.ScheduleId = schedule.ScheduleId;
-            scheduleResponse.StartTime = schedule.StartTime;
-            scheduleResponse.RoomNo = schedule.RoomNo;
-            scheduleResponse.EndTime = schedule.EndTime;
-            scheduleResponse.SlotBooking = schedule.SlotBooking;
-            scheduleResponse.Status = schedule.Status;
-            return scheduleResponse;
+            return schedule;
            
         }
 
         public async Task<List<ScheduleResponse>> GetAll(GetListScheduleRequest request)
         {
-            var schedulesQuery = (await _scheduleRepository.GetAll()).AsQueryable();
+            var schedulesQuery = (await  _odataClient.GetScheduleAsync()).AsQueryable();
 
       
 
@@ -89,20 +86,8 @@ namespace Services
             {
                 throw new Exception("Failed to get schedules");
             }
-            var scheduleResponses = new List<ScheduleResponse>();
-            foreach (var schedule in schedules)
-            {
-                ScheduleResponse scheduleResponse = new ScheduleResponse();
-                scheduleResponse.ScheduleId = schedule.ScheduleId;
-                scheduleResponse.DoctorId = schedule.DoctorId;
-                scheduleResponse.RoomNo = schedule.RoomNo;
-                scheduleResponse.StartTime = schedule.StartTime;
-                scheduleResponse.EndTime = schedule.EndTime;
-                scheduleResponse.SlotBooking = schedule.SlotBooking;
-                scheduleResponse.Status = schedule.Status;
-                scheduleResponses.Add(scheduleResponse);
-            }
-            return scheduleResponses;
+        
+            return schedules;
         }
 
         public async Task<bool> Update(ScheduleRequest request)

@@ -1,7 +1,9 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
 using BusinessObjects.Models;
+using DTOs.Response.Doctor;
 using DTOs.Response.Pet;
+using DTOs.Response.Schedule;
 using Microsoft.Extensions.Options;
 using Services.Client;
 
@@ -30,16 +32,28 @@ namespace Presentation.Client
 			return await _httpClient.GetFromJsonAsync<PetResponse>(url);
 		}
 
-		public async Task<List<Doctor>> GetDoctorAsync()
+		public async Task<List<DoctorResponse>> GetDoctorAsync()
 		{
 			var url = $"{_settings.BaseUrl}{_settings.DoctorEndpoint}";
-			return await _httpClient.GetFromJsonAsync<List<Doctor>>(url);
+			return await _httpClient.GetFromJsonAsync<List<DoctorResponse>>(url);
 		}
 
-		public async Task<Doctor> GetDoctorByIdAsync(int id)
+		public async Task<DoctorResponse> GetDoctorByIdAsync(int id)
 		{
 			var url = $"{_settings.BaseUrl}{_settings.DoctorEndpoint}/{id}";
-			return await _httpClient.GetFromJsonAsync<Doctor>(url);
+			return await _httpClient.GetFromJsonAsync<DoctorResponse>(url);
+		}
+
+		public async Task<List<ScheduleResponse>> GetScheduleAsync()
+		{
+			var url = $"{_settings.BaseUrl}{_settings.ScheduleEndpoint}";
+			return await _httpClient.GetFromJsonAsync<List<ScheduleResponse>>(url);
+		}
+
+		public async Task<ScheduleResponse> GetScheduleByIdAsync(int id)
+		{
+			var url = $"{_settings.BaseUrl}{_settings.ScheduleEndpoint}/{id}";
+			return await _httpClient.GetFromJsonAsync<ScheduleResponse>(url);
 		}
 	}
 }
