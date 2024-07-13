@@ -29,7 +29,6 @@ namespace BusinessObjects.Models
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<staff> staff { get; set; } = null!;
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -295,6 +294,8 @@ namespace BusinessObjects.Models
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("method");
+
+                entity.Property(e => e.Status).HasColumnName("status");
             });
 
             modelBuilder.Entity<Pet>(entity =>
