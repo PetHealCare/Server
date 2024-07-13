@@ -10,6 +10,7 @@ using DTOs;
 using DTOs.Request.Doctor;
 using DTOs.Response.Doctor;
 using DTOs.Response.Service;
+using Presentation.Client;
 using Repositories;
 using Repositories.Interface;
 using Services.Extentions.Paginate;
@@ -22,12 +23,15 @@ namespace Services.Class
 		private readonly IDoctorRepository _repo;
 		private readonly IUserRepository _userRepo;
 		private readonly IMapper _mapper;
+		private readonly OdataClient _odataClient;
 
-		public DoctorService(IDoctorRepository repo, IUserRepository userRepo, IMapper mapper)
+
+		public DoctorService(IDoctorRepository repo, IUserRepository userRepo, IMapper mapper, OdataClient odataClient)
 		{
 			_repo = repo;
 			_userRepo = userRepo;
 			_mapper = mapper;
+			_odataClient = odataClient;
 		}
 
 		public async Task<DoctorResponse> Create(CreateDoctorRequest request)
@@ -57,18 +61,12 @@ namespace Services.Class
 
 		public async Task<DoctorResponse> GetById(int id)
 		{
-			var doctor = await _repo.GetDoctorById(id, includeProperties: "Services");
+			var doctor = await _odataClient.GetDoctorByIdAsync(id);
 			if (doctor.Status == false)
 			{
 				return null;
 			}
-			var doctorResponse = _mapper.Map<DoctorResponse>(doctor);
-			doctorResponse.ServiceList = doctor.Services.Select(doctorService =>
-			{
-				var serviceResponse = _mapper.Map<ServiceResponse>(doctorService);
-				return serviceResponse;
-			}).ToList();
-			return doctorResponse;
+			return doctor;
 		}
 
 		public async Task<DoctorResponse> GetByUserId(int userId)
@@ -90,7 +88,7 @@ namespace Services.Class
 		public async Task<PaginatedList<DoctorResponse>> GetList(GetListDoctorRequest request)
 		{
 			var response = new PaginatedList<DoctorResponse>();
-			var doctorsQuery = (await _repo.GetList(includeProperties: "Services")).AsQueryable();
+			var doctorsQuery = (await _odataClient.GetDoctorAsync()).AsQueryable();
 
 			//filter doctor has not been deleted
 			doctorsQuery = doctorsQuery.Where(p => p.Status == true);
@@ -102,21 +100,7 @@ namespace Services.Class
 
 			var filterredDoctors = doctorsQuery.ToList();
 
-			var doctorResponses = filterredDoctors.Select(doctor =>
-			{
-				var doctorResponse = _mapper.Map<DoctorResponse>(doctor);
-
-				// Map DoctorDetails to DoctorDetailResponse and include Product information
-				doctorResponse.ServiceList = doctor.Services.Select(doctorService =>
-				{
-					var serviceResponse = _mapper.Map<ServiceResponse>(doctorService);
-					return serviceResponse;
-				}).ToList();
-
-				return doctorResponse;
-			});
-
-			return await doctorResponses.ToPaginateAsync(request);
+			return await filterredDoctors.ToPaginateAsync(request);
 		}
 
 		public async Task<DoctorResponse> Update(UpdateDoctorRequest request)

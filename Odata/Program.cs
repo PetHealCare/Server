@@ -2,7 +2,9 @@ using BusinessObjects.Models;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
+using Odata;
 using Odata.Service;
+using Repositories;
 using Repositories.Class;
 using Repositories.Interface;
 using Services.MappingProfile;
@@ -14,25 +16,11 @@ builder.Services.AddControllers().AddOData(opt =>
 	opt.Select().Filter().Expand().Count().OrderBy().SetMaxTop(100)
 		.AddRouteComponents("odata", GetEdmModel()));
 
-builder.Services.AddCors(options =>
-{
-	options.AddPolicy("AllowReactApp",
-		builder =>
-		{
-			builder.WithOrigins("http://localhost:3000", "https://localhost:7083", "http://localhost:7083")
-				   .AllowAnyHeader()
-				   .AllowAnyMethod()
-				   .AllowCredentials();
-		});
-});
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<IPetService, PetService>();
-builder.Services.AddScoped<IPetRepository, PetRepository>();
-builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddMasterServices();
+builder.Services.AddPackage();
 
 var app = builder.Build();
 
@@ -67,5 +55,7 @@ IEdmModel GetEdmModel()
 {
 	var builder = new ODataConventionModelBuilder();
 	builder.EntitySet<Pet>("Pets");
+	builder.EntitySet<Doctor>("Doctors");
+	builder.EntitySet<Schedule>("Schedules");
 	return builder.GetEdmModel();
 }
