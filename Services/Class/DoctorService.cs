@@ -7,6 +7,7 @@ using AutoMapper;
 using BusinessObjects.Models;
 using DataAccessLayers;
 using DTOs;
+using DTOs.Request.Customer;
 using DTOs.Request.Doctor;
 using DTOs.Response.Doctor;
 using DTOs.Response.Service;
@@ -38,6 +39,7 @@ namespace Services.Class
 		{
 			var user = _mapper.Map<User>(request);
 			user.Role = (int)RoleEnum.Doctor;
+			user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 			var userCreated = await _userRepo.Create(user);
 			var doctor = _mapper.Map<Doctor>(request);
 			doctor.UserId = userCreated.UserId;
@@ -114,7 +116,7 @@ namespace Services.Class
 			if (!string.IsNullOrEmpty(request.Password))
 			{
 				var user = await _userRepo.GetUserById(doctor.UserId);
-				user.Password = request.Password;
+				user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 				UserDAO.Instance.Update(user);
 			}
 

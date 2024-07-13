@@ -105,7 +105,7 @@ namespace Services
             
             User user = new User();
             user.Email = registerRequest.Email;
-            user.Password = registerRequest.Password;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(registerRequest.Password);
             user.Role = (int)RoleEnum.Customer;
             var userResponse = await _repo.RegisterUser(user);
             if(userResponse == null)

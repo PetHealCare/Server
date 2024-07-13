@@ -20,9 +20,19 @@ namespace DataAccessLayers
         }
         public User Login(LoginRequest loginCustomerRequest)
         {
-            
-            return _context.Users.FirstOrDefault(c => c.Email.Equals(loginCustomerRequest.Email) && c.Password.Equals(loginCustomerRequest.Password));
-        }
+
+			// Retrieve the user by email
+			var user = _context.Users.FirstOrDefault(c => c.Email == loginCustomerRequest.Email);
+
+			// Check if user exists and the password is correct
+			if (user != null && BCrypt.Net.BCrypt.Verify(loginCustomerRequest.Password, user.Password))
+			{
+				return user;
+			}
+
+			// Return null or throw an exception if login fails
+			return null;
+		}
 
         
         public bool Resgiter(Customer customer)
