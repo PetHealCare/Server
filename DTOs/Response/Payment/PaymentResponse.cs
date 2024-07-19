@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.Request.Payment
+namespace DTOs.Response.Payment
 {
-    public class PaymentRequest
+    public class PaymentResponse
     {
         public int PaymentId { get; set; }
         public double? Amount { get; set; }

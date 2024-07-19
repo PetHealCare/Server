@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.Models;
 using DTOs.Request.Payment;
+using DTOs.Response.Payment;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,8 @@ namespace Services
 {
     public interface IPaymentService
     {
-        List<Payment> GetPayments();
-        Payment GetPaymentById(int id);
+        List<PaymentResponse> GetPayments();
+        PaymentResponse GetPaymentById(int id);
         Payment AddPayment(PaymentRequest payment);
         bool UpdatePayment(PaymentRequest payment);
         bool DeletePayment(int id);
@@ -26,13 +27,42 @@ namespace Services
         }
         
 
-        public List<Payment> GetPayments()
+        public List<PaymentResponse> GetPayments()
         {
-            return _paymentRepository.GetPayments();
+            var payments = _paymentRepository.GetPayments();
+            var response = new List<PaymentResponse>();
+            foreach (var payment in payments)
+            {
+                response.Add(new PaymentResponse
+                {
+                    PaymentId = payment.PaymentId,
+                    Amount = payment.Amount,
+                    Method = payment.Method,
+                    InsDate = payment.InsDate,
+                    Status = payment.Status,
+                    BillId = payment.BillId
+                    
+                });
+            }
+            return response;
         }
-        public Payment GetPaymentById(int id)
+        public PaymentResponse GetPaymentById(int id)
         {
-            return _paymentRepository.GetPaymentById(id);
+            var payment = _paymentRepository.GetPaymentById(id);
+            if (payment == null)
+            {
+                return null;
+            }
+            return new PaymentResponse
+            {
+                PaymentId = payment.PaymentId,
+                Amount = payment.Amount,
+                Method = payment.Method,
+                InsDate = payment.InsDate,
+                Status = payment.Status,
+                BillId = payment.BillId
+            };
+            
         }
         public Payment AddPayment(PaymentRequest payment)
         {
@@ -41,7 +71,8 @@ namespace Services
                 Amount = payment.Amount,
                 Method = payment.Method,
                 InsDate = payment.InsDate,
-                Status = payment.Status
+                Status = payment.Status,
+                BillId = payment.BillId
             };
             return _paymentRepository.AddPayment(request);
 
@@ -56,7 +87,8 @@ namespace Services
                 Amount = payment.Amount,
                 Method = payment.Method,
                 InsDate = payment.InsDate,
-                Status = payment.Status
+                Status = payment.Status,
+                BillId = payment.BillId
             };
             return _paymentRepository.UpdatePayment(request);
         }

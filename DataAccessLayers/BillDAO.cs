@@ -40,7 +40,6 @@ namespace DataAccessLayers
             billUpdate.BookingId = bill.BookingId;
             billUpdate.TotalAmount = bill.TotalAmount;
             billUpdate.InsDate = bill.InsDate;
-            _context.SaveChanges();
             return _context.SaveChanges() > 0;
         }
         public bool DeleteBill(int id)

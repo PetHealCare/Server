@@ -40,7 +40,8 @@ namespace DataAccessLayers
             paymentUpdate.Amount = payment.Amount;
             paymentUpdate.Method = payment.Method;
             paymentUpdate.InsDate = payment.InsDate;
-            _context.SaveChanges();
+            paymentUpdate.Status = payment.Status;
+            paymentUpdate.BillId = payment.BillId;
             return _context.SaveChanges() > 0;
         }
         public bool DeletePayment(int id)
