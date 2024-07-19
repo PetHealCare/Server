@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.Models;
 using DTOs.Request.BillRequest;
+using DTOs.Response.Bill;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,8 @@ namespace Services
 {
     public interface IBillService
     {
-        public List<Bill> GetBills();
-        public Bill GetBillById(int id);
+        public List<BillResponse> GetBills();
+        public BillResponse GetBillById(int id);
         public Bill AddBill(BillRequest bill);
         public bool UpdateBill(BillRequest bill);
         public bool DeleteBill(int id);
@@ -40,14 +41,34 @@ namespace Services
             return _billRepository.DeleteBill(id);
         }
 
-        public Bill GetBillById(int id)
+        public BillResponse GetBillById(int id)
         {
-            return _billRepository.GetBillById(id);
+            var bill = _billRepository.GetBillById(id);
+            if (bill == null)
+            {
+                return null;
+            }
+            return new BillResponse
+            {
+                BillId = bill.BillId,
+                BookingId = bill.BookingId,
+                TotalAmount = bill.TotalAmount,
+                InsDate = bill.InsDate
+            };
+            
         }
 
-        public List<Bill> GetBills()
+        public List<BillResponse> GetBills()
         {
-            return _billRepository.GetBills();
+            var bills = _billRepository.GetBills();
+            return bills.Select(bill => new BillResponse
+            {
+                BillId = bill.BillId,
+                BookingId = bill.BookingId,
+                TotalAmount = bill.TotalAmount,
+                InsDate = bill.InsDate
+            }).ToList();
+            
         }
 
         public bool UpdateBill(BillRequest bill)

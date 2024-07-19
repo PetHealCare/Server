@@ -2,6 +2,7 @@
 using DTOs;
 using DTOs.Request.Customer;
 using DTOs.Response.Customer;
+using Presentation.Client;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,11 @@ namespace Services
 {
     public interface ICustomerService
     {
-        public List<CustomerResponse> GetAll();
+        public Task<List<CustomerResponse>> GetAll();
         public Task<User> Login(LoginRequest loginCustomerRequest);
         public Task<bool> Register(RegisterRequest registerRequest);
         public Task<bool> UpdateProfile(UpdateProfileCustomerResquest customerResquest);
-        public CustomerResponse GetCustomerById(int customerId);
+        public Task<CustomerResponse> GetCustomerById(int customerId);
         public Task<bool> UpdateCustomer(CustomerRequest request);
         public CustomerResponse GetCustomerByUserId(int userId);
     }
@@ -25,44 +26,27 @@ namespace Services
     {
         private readonly ICustomerRepository _repo;
         private readonly IUserRepository _userRepository;
-        public CustomerService(ICustomerRepository repo, IUserRepository userRepository)
+        private readonly OdataClient _odataClient;
+        public CustomerService(ICustomerRepository repo, IUserRepository userRepository, OdataClient _odataClient)
         {
             _repo = repo;
             _userRepository = userRepository;
+            this._odataClient = _odataClient;
         }
-        public List<CustomerResponse> GetAll()
+        public async Task<List<CustomerResponse>> GetAll()
         {
-            var customers = _repo.GetAll();
-            List<CustomerResponse> customerResponses = new List<CustomerResponse>();
-            foreach (var customer in customers)
-            {
-                CustomerResponse customerResponse = new CustomerResponse();
-                customerResponse.CustomerId = customer.CustomerId;
-                customerResponse.FullName = customer.FullName;
-                customerResponse.PhoneNumber = customer.PhoneNumber;
-                customerResponse.Address = customer.Address;
-                customerResponse.Status = customer.Status;
-                customerResponse.UserId = customer.UserId;
-                customerResponses.Add(customerResponse);
-            }
-            return customerResponses;
+            var customers = await _odataClient.GetCustomersAsync();
+            return customers;
         }
 
-        public CustomerResponse GetCustomerById(int customerId)
+        public async Task<CustomerResponse> GetCustomerById(int customerId)
         {
-            var customer = _repo.GetCustomerById(customerId);
+            var customer = await _odataClient.GetCustomerByIdAsync( customerId);
             if (customer == null)
             {
                 throw new Exception("Customer not found.");
             }
-            CustomerResponse customerResponse = new CustomerResponse();
-            customerResponse.CustomerId = customer.CustomerId;
-            customerResponse.FullName = customer.FullName;
-            customerResponse.PhoneNumber = customer.PhoneNumber;
-            customerResponse.Address = customer.Address;
-            customerResponse.Status = customer.Status;
-            customerResponse.UserId = customer.UserId;
-            return customerResponse;
+            return customer;
         }
 
         public CustomerResponse GetCustomerByUserId(int userId)

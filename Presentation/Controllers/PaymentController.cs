@@ -16,9 +16,9 @@ namespace Presentation.Controllers
             _paymentService = paymentService;
         }
         [HttpGet]
-        public IActionResult GetPayments()
+        public IActionResult GetPayments([FromQuery]GetListPaymentRequest request)
         {
-            return Ok(_paymentService.GetPayments());
+            return Ok(_paymentService.GetPayments(request));
         }
         [HttpGet("{id}")]
         public IActionResult GetPaymentById([FromRoute] int id)

@@ -44,6 +44,9 @@ namespace Odata
 
 			services.AddScoped<IServiceService, ServiceService>();
 			services.AddScoped<IServiceRepository, ServiceRepository>();
+
+			services.AddScoped<ICustomerService, CustomerService>();
+			services.AddScoped<ICustomerRepository, CustomerRepository>();
 		}
 	}
 }
