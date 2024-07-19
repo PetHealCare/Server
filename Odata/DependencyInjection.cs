@@ -38,6 +38,9 @@ namespace Odata
 
 			services.AddScoped<IStaffService, StaffService>();
 			services.AddScoped<IStaffRepository, StaffRepository>();
+
+			services.AddScoped<ITransactionService, TransactionService>();
+			services.AddScoped<ITransactionRepository, TransactionRepository>();
 		}
 	}
 }
