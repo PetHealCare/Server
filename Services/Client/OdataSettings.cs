@@ -10,5 +10,7 @@
 		public string ScheduleEndpoint { get; set; }
 		public string BookingEndpoint { get; set; }
 		public string UserEndpoint { get; set; }
+		public string TransactionEndpoint { get; set; }
+
 	}
 }
