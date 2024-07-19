@@ -16,11 +16,11 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetListCustomer()
+        public async Task<IActionResult> GetListCustomer()
         {
             try
             {
-                var response = _service.GetAll();
+                var response = await _service.GetAll();
                 if (response == null)
                 {
                     return NotFound();
@@ -52,11 +52,11 @@ namespace Presentation.Controllers
             }
         }
         [HttpGet("{id}")]
-        public IActionResult GetCustomerById(int id)
+        public async Task<IActionResult> GetCustomerById(int id)
         {
             try
             {
-                var response = _service.GetCustomerById(id);
+                var response = await _service.GetCustomerById(id);
                 if (response == null)
                 {
                     return NotFound();
