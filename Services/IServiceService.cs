@@ -2,6 +2,7 @@
 using BusinessObjects.Models;
 using DTOs.Request.Service;
 using DTOs.Response.Service;
+using Presentation.Client;
 using Repositories;
 using Repositories.Interface;
 using System;
@@ -14,8 +15,8 @@ namespace Services
 {
     public interface IServiceService
     {
-        public List<ServiceResponse> GetAll();
-        public ServiceResponse Get(int id);
+        public Task<List<ServiceResponse>> GetAll();
+        public Task<ServiceResponse> Get(int id);
         public Task<ServiceResponse> Create(ServiceRequest service);
         public Task<bool> Update(ServiceRequest service);
         public bool Delete(int id);
@@ -26,12 +27,14 @@ namespace Services
         private readonly IServiceRepository _repo;
         private readonly IDoctorRepository _doctorRepo;
         private readonly IMapper _mapper;
+        private readonly OdataClient _odataClient;
 
-		public ServiceService(IServiceRepository repo, IDoctorRepository doctorRepo, IMapper mapper)
+		public ServiceService(IServiceRepository repo, IDoctorRepository doctorRepo, IMapper mapper, OdataClient _client)
 		{
 			_repo = repo;
 			_doctorRepo = doctorRepo;
 			_mapper = mapper;
+            this._odataClient = _client;
 		}
 
 		public async Task<ServiceResponse> Create(ServiceRequest request)
@@ -53,37 +56,20 @@ namespace Services
             return _repo.Delete(id);
         }
 
-        public ServiceResponse Get(int id)
+        public async Task<ServiceResponse> Get(int id)
         { 
-            var service = _repo.GetById(id);
+            var service = await _odataClient.GetServiceByIdAsync(id);
             if (service == null)
             {
                 throw new Exception("Service not found.");
             }
-            var serviceResponse = new ServiceResponse();
-            serviceResponse.ServiceId = service.ServiceId;
-            serviceResponse.ServiceName = service.ServiceName;
-            serviceResponse.Description = service.Description;
-            serviceResponse.LimitTime = service.LimitTime;
-            serviceResponse.Price = service.Price;
-            return serviceResponse;
+            return service;
         }
 
-        public List<ServiceResponse> GetAll()
+        public async  Task<List<ServiceResponse>> GetAll()
         {
-            var services = _repo.GetAll();
-            List<ServiceResponse> serviceResponses = new List<ServiceResponse>();
-            foreach (var service in services)
-            {
-                ServiceResponse serviceResponse = new ServiceResponse();
-                serviceResponse.ServiceId = service.ServiceId;
-                serviceResponse.ServiceName = service.ServiceName;
-                serviceResponse.Description = service.Description;
-                serviceResponse.LimitTime = service.LimitTime;
-                serviceResponse.Price = service.Price;
-                serviceResponses.Add(serviceResponse);
-            }
-            return serviceResponses;
+            var services = await _odataClient.GetServicesAsync();
+			return services;
         }
 
         public async Task<bool> Update(ServiceRequest request)

@@ -39,7 +39,6 @@ namespace DataAccessLayers
             var billUpdate = _context.Bills.Find(bill.BillId);
             billUpdate.BookingId = bill.BookingId;
             billUpdate.TotalAmount = bill.TotalAmount;
-            billUpdate.PaymentId = bill.PaymentId;
             billUpdate.InsDate = bill.InsDate;
             _context.SaveChanges();
             return _context.SaveChanges() > 0;
