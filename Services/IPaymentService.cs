@@ -12,7 +12,7 @@ namespace Services
 {
     public interface IPaymentService
     {
-        List<PaymentResponse> GetPayments();
+        List<PaymentResponse> GetPayments(GetListPaymentRequest request);
         PaymentResponse GetPaymentById(int id);
         Payment AddPayment(PaymentRequest payment);
         bool UpdatePayment(PaymentRequest payment);
@@ -27,9 +27,14 @@ namespace Services
         }
         
 
-        public List<PaymentResponse> GetPayments()
+        public List<PaymentResponse> GetPayments(GetListPaymentRequest request)
         {
-            var payments = _paymentRepository.GetPayments();
+
+            var payments = _paymentRepository.GetPayments().AsQueryable();
+            if (request.BillId > 0)
+            {
+                payments = payments.Where(x => x.BillId == request.BillId);
+            }
             var response = new List<PaymentResponse>();
             foreach (var payment in payments)
             {
