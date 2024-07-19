@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
 using BusinessObjects.Models;
+using DTOs.Response.Booking;
 using DTOs.Response.Doctor;
 using DTOs.Response.Pet;
 using DTOs.Response.Schedule;
@@ -80,6 +81,18 @@ namespace Presentation.Client
 		{
 			var url = $"{_settings.BaseUrl}{_settings.TransactionEndpoint}/{id}";
 			return await _httpClient.GetFromJsonAsync<TransactionResponse>(url);
+		}
+
+		public async Task<List<BookingResponse>> GetBookingsAsync()
+		{
+			var url = $"{_settings.BaseUrl}{_settings.BookingEndpoint}";
+			return await _httpClient.GetFromJsonAsync<List<BookingResponse>>(url);
+		}
+
+		public async Task<BookingResponse> GetBookingByIdAsync(int id)
+		{
+			var url = $"{_settings.BaseUrl}{_settings.BookingEndpoint}/{id}";
+			return await _httpClient.GetFromJsonAsync<BookingResponse>(url);
 		}
 	}
 }
