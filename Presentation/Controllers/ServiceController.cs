@@ -20,11 +20,11 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetListService() 
+        public async Task<IActionResult> GetListService() 
         {
             try
             {
-                var response = _service.GetAll();
+                var response = await _service.GetAll();
                 if (response == null)
                 {
                     return NotFound();
@@ -39,11 +39,11 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetService(int id)
+        public async Task<IActionResult> GetService(int id)
         {
             try
             {
-                var response = _service.Get(id);
+                var response = await _service.Get(id);
                 if (response == null)
                 {
                     return NotFound();

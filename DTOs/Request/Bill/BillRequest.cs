@@ -11,7 +11,6 @@ namespace DTOs.Request.BillRequest
         public int BillId { get; set; }
         public int BookingId { get; set; }
         public double? TotalAmount { get; set; }
-        public int PaymentId { get; set; }
         public DateTime? InsDate { get; set; }
     }
 }

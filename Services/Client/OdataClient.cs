@@ -5,6 +5,7 @@ using DTOs.Response.Booking;
 using DTOs.Response.Doctor;
 using DTOs.Response.Pet;
 using DTOs.Response.Schedule;
+using DTOs.Response.Service;
 using DTOs.Response.Staff;
 using DTOs.Response.Transaction;
 using Microsoft.Extensions.Options;
@@ -93,6 +94,18 @@ namespace Presentation.Client
 		{
 			var url = $"{_settings.BaseUrl}{_settings.BookingEndpoint}/{id}";
 			return await _httpClient.GetFromJsonAsync<BookingResponse>(url);
+		}
+
+		public async Task<List<ServiceResponse>> GetServicesAsync()
+		{
+			var url = $"{_settings.BaseUrl}{_settings.ServiceEndpoint}";
+			return await _httpClient.GetFromJsonAsync<List<ServiceResponse>>(url);
+		}
+
+		public async Task<ServiceResponse> GetServiceByIdAsync(int id)
+		{
+			var url = $"{_settings.BaseUrl}{_settings.ServiceEndpoint}/{id}";
+			return await _httpClient.GetFromJsonAsync<ServiceResponse>(url);
 		}
 	}
 }

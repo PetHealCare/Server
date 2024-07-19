@@ -30,7 +30,6 @@ namespace Services
             {
                 BookingId = bill.BookingId,
                 TotalAmount = bill.TotalAmount,
-                PaymentId = bill.PaymentId,
                 InsDate = bill.InsDate
             };
             return _billRepository.AddBill(request);
@@ -58,7 +57,6 @@ namespace Services
                 BillId = bill.BillId,
                 BookingId = bill.BookingId,
                 TotalAmount = bill.TotalAmount,
-                PaymentId = bill.PaymentId,
                 InsDate = bill.InsDate
             };
             return _billRepository.UpdateBill(request);
