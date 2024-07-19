@@ -5,6 +5,7 @@ using DTOs.Response.Doctor;
 using DTOs.Response.Pet;
 using DTOs.Response.Schedule;
 using DTOs.Response.Staff;
+using DTOs.Response.Transaction;
 using Microsoft.Extensions.Options;
 using Services.Client;
 
@@ -67,6 +68,18 @@ namespace Presentation.Client
 		{
 			var url = $"{_settings.BaseUrl}{_settings.StaffEndpoint}/{id}";
 			return await _httpClient.GetFromJsonAsync<StaffResponse>(url);
+		}
+
+		public async Task<List<TransactionResponse>> GetTransactionsAsync()
+		{
+			var url = $"{_settings.BaseUrl}{_settings.TransactionEndpoint}";
+			return await _httpClient.GetFromJsonAsync<List<TransactionResponse>>(url);
+		}
+
+		public async Task<TransactionResponse> GetTransactionByIdAsync(int id)
+		{
+			var url = $"{_settings.BaseUrl}{_settings.TransactionEndpoint}/{id}";
+			return await _httpClient.GetFromJsonAsync<TransactionResponse>(url);
 		}
 	}
 }
