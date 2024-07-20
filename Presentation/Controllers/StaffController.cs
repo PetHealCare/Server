@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Extentions.Paginate;
 using Services.Extentions;
 using Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StaffController : ControllerBase
+	[Authorize]
+	public class StaffController : ControllerBase
     {
 		private readonly IStaffService _service;
 

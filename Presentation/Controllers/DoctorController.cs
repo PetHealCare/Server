@@ -12,6 +12,7 @@ namespace Presentation.Controllers
 {
 	[Route("api/doctor")]
 	[ApiController]
+	[Authorize]
 	public class DoctorController : ControllerBase
 	{
 		private readonly IDoctorService _service;

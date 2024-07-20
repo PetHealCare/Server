@@ -18,6 +18,7 @@ namespace Presentation.Controllers
 {
 	[Route("api/pet")]
 	[ApiController]
+	[Authorize]
 	public class PetController : ControllerBase
 	{
 		private readonly IPetService _service;
@@ -32,7 +33,6 @@ namespace Presentation.Controllers
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns></returns>
-		[Authorize]		
 		[ProducesResponseType(typeof(PetHealthCareResponse<PaginatedList<PetResponse>>), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status404NotFound)]
 		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status500InternalServerError)]

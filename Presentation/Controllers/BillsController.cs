@@ -1,4 +1,5 @@
 ﻿using DTOs.Request.BillRequest;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -7,6 +8,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BillsController : ControllerBase
     {
         private readonly IBillService _billService;

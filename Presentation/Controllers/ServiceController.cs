@@ -2,6 +2,7 @@
 using DTOs.Request.Service;
 using DTOs.Response.Pet;
 using DTOs.Response.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -11,7 +12,8 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServiceController : ControllerBase
+	[Authorize]
+	public class ServiceController : ControllerBase
     {
         private readonly IServiceService _service;
         public ServiceController(IServiceService service)
