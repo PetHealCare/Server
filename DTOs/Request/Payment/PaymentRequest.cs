@@ -11,7 +11,6 @@ namespace DTOs.Request.Payment
         public int PaymentId { get; set; }
         public double? Amount { get; set; }
         public string? Method { get; set; }
-        public DateTime? InsDate { get; set; }
         public string? Status { get; set; }
         public int BillId { get; set; }
     }
