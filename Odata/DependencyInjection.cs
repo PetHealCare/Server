@@ -47,6 +47,9 @@ namespace Odata
 
 			services.AddScoped<ICustomerService, CustomerService>();
 			services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+			services.AddScoped<IBookingService, BookingService>();
+			services.AddScoped<IBookingRepository, BookingRepository>();
 		}
 	}
 }
