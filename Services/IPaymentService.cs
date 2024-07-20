@@ -2,6 +2,7 @@
 using DTOs.Request.Payment;
 using DTOs.Response.Payment;
 using Repositories;
+using Repositories.Interface;
 using Services.Extentions;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,15 @@ namespace Services
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentRepository _paymentRepository;
-        public PaymentService(IPaymentRepository paymentRepository)
-        {
-            _paymentRepository = paymentRepository;
-        }
-        
+        private readonly ITransactionRepository _tranRepo;
 
-        public List<PaymentResponse> GetPayments(GetListPaymentRequest request)
+		public PaymentService(IPaymentRepository paymentRepository, ITransactionRepository tranRepo)
+		{
+			_paymentRepository = paymentRepository;
+			_tranRepo = tranRepo;
+		}
+
+		public List<PaymentResponse> GetPayments(GetListPaymentRequest request)
         {
 
             var payments = _paymentRepository.GetPayments().AsQueryable();
@@ -88,6 +91,7 @@ namespace Services
                 TransactionDate = Utils.GetDateTimeNow(),
                 TransactionId = paymenCreated.PaymentId,
 			};
+            _tranRepo.Create(transaction);
             return paymenCreated;
         }
 
@@ -109,6 +113,7 @@ namespace Services
 				TransactionDate = Utils.GetDateTimeNow(),
 				TransactionId = request.BillId,
 			};
+			_tranRepo.Create(transaction);
 
 			return _paymentRepository.UpdatePayment(request);
         }
