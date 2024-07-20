@@ -2,6 +2,7 @@
 using DTOs.Request.Payment;
 using DTOs.Response.Payment;
 using Repositories;
+using Services.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,13 +76,19 @@ namespace Services
             {
                 Amount = payment.Amount,
                 Method = payment.Method,
-                InsDate = payment.InsDate,
+                InsDate = Utils.GetDateTimeNow(),
                 Status = payment.Status,
                 BillId = payment.BillId
             };
-            return _paymentRepository.AddPayment(request);
-
-            
+            var paymenCreated = _paymentRepository.AddPayment(request);
+			var transaction = new Transaction
+            {
+                Amount = payment.Amount,
+                BillId = payment.BillId,
+                TransactionDate = Utils.GetDateTimeNow(),
+                TransactionId = paymenCreated.PaymentId,
+			};
+            return paymenCreated;
         }
 
         public bool UpdatePayment(PaymentRequest payment)
@@ -91,11 +98,19 @@ namespace Services
                 PaymentId = payment.PaymentId,
                 Amount = payment.Amount,
                 Method = payment.Method,
-                InsDate = payment.InsDate,
+                InsDate = Utils.GetDateTimeNow(),
                 Status = payment.Status,
                 BillId = payment.BillId
             };
-            return _paymentRepository.UpdatePayment(request);
+			var transaction = new Transaction
+			{
+				Amount = request.Amount,
+				BillId = request.BillId,
+				TransactionDate = Utils.GetDateTimeNow(),
+				TransactionId = request.BillId,
+			};
+
+			return _paymentRepository.UpdatePayment(request);
         }
         public bool DeletePayment(int id)
         {
