@@ -1,4 +1,5 @@
 ﻿using DTOs.Request.Customer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -7,7 +8,8 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+	[Authorize]
+	public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _service;
         public CustomerController(ICustomerService service)

@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.Models;
 using DTOs.Request.Booking;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -8,7 +9,8 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BookingController : ControllerBase
+	[Authorize]
+	public class BookingController : ControllerBase
     {
         private readonly IBookingService _service;
        

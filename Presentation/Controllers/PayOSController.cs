@@ -1,4 +1,5 @@
 ﻿using DTOs.Request.PayOS;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Net.payOS;
@@ -9,7 +10,8 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PayOSController : ControllerBase
+	[Authorize]
+	public class PayOSController : ControllerBase
     {
         private readonly PayOS _payOS;
         private readonly IPaymentService _paymentService;

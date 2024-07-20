@@ -1,4 +1,5 @@
 ﻿using DTOs.Request.Payment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -7,7 +8,8 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentController : ControllerBase
+	[Authorize]
+	public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
 

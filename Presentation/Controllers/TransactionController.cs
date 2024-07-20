@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Extentions.Paginate;
 using Services.Extentions;
 using Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
 	[Route("api/transaction")]
 	[ApiController]
+	[Authorize]
 	public class TransactionController : ControllerBase
 	{
 		private readonly ITransactionService _service;
