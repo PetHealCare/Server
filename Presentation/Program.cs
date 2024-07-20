@@ -94,6 +94,7 @@ else
 app.UseCors("AllowReactApp");
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
