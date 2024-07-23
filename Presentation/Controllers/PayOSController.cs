@@ -30,7 +30,7 @@ namespace Presentation.Controllers
                 int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
                 ItemData item = new ItemData("Payment", 1, Convert.ToInt32(payment.Amount * 1000));
                 List<ItemData> items = new List<ItemData> { item };
-                PaymentData paymentData = new PaymentData(orderCode, Convert.ToInt32(payment.Amount * 1000),  "", items, request.cancelUrl, request.returnUrl);
+                PaymentData paymentData = new PaymentData(payment.PaymentId, Convert.ToInt32(payment.Amount * 1000),  "", items, request.cancelUrl, request.returnUrl);
 
                 CreatePaymentResult createPayment = await _payOS.createPaymentLink(paymentData);
 
