@@ -59,11 +59,32 @@ namespace Services
 			booking.Slot = request.Slot;
 			booking.Note = request.Note;
 			booking.Status = request.Status;
+
 			return await _repo.CreateBooking(booking);
 		}
 
-		public async Task<bool> CreateBookingWithService(BookingServiceRequest request)
+        public async Task<bool> CreateBookingWithService(BookingServiceRequest request)
 		{
+            var existingSchedules = await _scheduleRepository.GetSchedulesByDoctorIdAndRoomNo(request.DoctorId, request.RoomNo);
+            foreach (var existingSchedule in existingSchedules)
+            {
+                if (existingSchedule.StartTime.HasValue && existingSchedule.EndTime.HasValue)
+                {
+                    if (existingSchedule.StartTime.Value.Date == request.StartTime.Value.Date &&
+                        (request.StartTime < existingSchedule.EndTime.Value && request.EndTime > existingSchedule.StartTime.Value))
+                    {
+                        throw new ArgumentException("The requested time slot overlaps with an existing schedule on the same day and room.");
+                    }
+                }
+            }
+            var schedule = new Schedule();
+			schedule.DoctorId = request.DoctorId;
+			schedule.RoomNo = request.RoomNo;
+			schedule.StartTime = request.StartTime;
+			schedule.EndTime = request.EndTime;
+			schedule.SlotBooking = request.SlotBooking;
+			schedule.Status = true;
+			var createSchedule = _scheduleRepository.Create(schedule);
 			if (request.ServiceIds.Count > 5)
 			{
 				throw new ArgumentException("You can only add up to 5 services per booking.");
@@ -72,19 +93,9 @@ namespace Services
 			booking.PetId = request.PetId;
 			booking.CustomerId = request.CustomerId;
 			booking.DoctorId = request.DoctorId;
-			booking.ScheduleId = request.ScheduleId;
-			var schedule = await _scheduleRepository.Get(request.ScheduleId);
-			if (schedule == null)
-			{
-				throw new Exception("Not found");
-			}
-			if (schedule.Status == false)
-			{
-				throw new Exception("Exist Booking");
-
-			}
+			booking.ScheduleId = createSchedule.Result.ScheduleId;
 			booking.BookingDate = DateTime.Now;
-			booking.Slot = schedule.SlotBooking;
+			booking.Slot = createSchedule.Result.SlotBooking;
 			booking.Note = request.Note;
 			booking.Status = true;
 			var result = await _repo.CreateBooking(booking);

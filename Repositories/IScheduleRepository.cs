@@ -18,6 +18,7 @@ namespace Repositories
         public Task<List<Schedule>> GetAll();
         Task<Schedule> Create(Schedule schedule);
         public Task<bool> updateStatus(int id);
+        public Task<List<Schedule>> GetSchedulesByDoctorIdAndRoomNo(int doctorId, string roomNo);
 
 
     }
@@ -54,6 +55,9 @@ namespace Repositories
             return await ScheduleDAO.Instance.UpdateSchedule(schedule);
         }
 
-        
+        public async Task<List<Schedule>> GetSchedulesByDoctorIdAndRoomNo(int doctorId, string roomNo)
+        {
+            return await ScheduleDAO.Instance.GetSchedulesByDoctorIdAndRoomNo(doctorId, roomNo);
+        }
     }
 }

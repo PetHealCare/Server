@@ -77,18 +77,25 @@ namespace Presentation.Controllers
             try
             {
                 var response = await _service.CreateBookingWithService(booking);
-                if (response == null)
+                if (!response)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Booking creation failed." });
                 }
-                return Ok(response);
+                return Ok(new { message = "Booking created successfully." });
             }
-            catch (Exception)
+            catch (ArgumentException ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                // Handle validation errors
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                
 
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An internal server error occurred." });
             }
         }
+
 
 
         [HttpPut]
