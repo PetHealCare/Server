@@ -53,10 +53,10 @@ namespace DataAccessLayers
             await _context.SaveChangesAsync();
             return schedule;
         }
-        public async Task<List<Schedule>> GetSchedulesByDoctorIdAndRoomNo(int doctorId, string roomNo)
+        public async Task<List<Schedule>> GetSchedulesByDoctorId(int doctorId)
         {
             return _context.Schedules
-            .Where(s => s.DoctorId == doctorId && s.RoomNo.Equals(roomNo))
+            .Where(s => s.DoctorId == doctorId)
             .ToList();
         }
 }

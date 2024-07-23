@@ -65,7 +65,7 @@ namespace Services
 
         public async Task<bool> CreateBookingWithService(BookingServiceRequest request)
 		{
-            var existingSchedules = await _scheduleRepository.GetSchedulesByDoctorIdAndRoomNo(request.DoctorId, request.RoomNo);
+            var existingSchedules = await _scheduleRepository.GetSchedulesByDoctorId(request.DoctorId);
             foreach (var existingSchedule in existingSchedules)
             {
                 if (existingSchedule.StartTime.HasValue && existingSchedule.EndTime.HasValue)
