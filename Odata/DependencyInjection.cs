@@ -50,6 +50,10 @@ namespace Odata
 
 			services.AddScoped<IBookingService, BookingService>();
 			services.AddScoped<IBookingRepository, BookingRepository>();
+
+			services.AddScoped<IMedicalRecordSerivce, MedicalRecordService>();
+			services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
+			
 		}
 	}
 }

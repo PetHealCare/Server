@@ -83,6 +83,10 @@ namespace Presentation
 			services.AddScoped<IPaymentService, PaymentService>();
 			services.AddScoped<ITransactionService, TransactionService>();
 			services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+			services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
+			services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+
 			services.AddScoped<OdataClient>();
 
 		}
