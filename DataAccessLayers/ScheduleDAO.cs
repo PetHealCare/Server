@@ -53,5 +53,11 @@ namespace DataAccessLayers
             await _context.SaveChangesAsync();
             return schedule;
         }
+        public async Task<List<Schedule>> GetSchedulesByDoctorId(int doctorId)
+        {
+            return _context.Schedules
+            .Where(s => s.DoctorId == doctorId)
+            .ToList();
+        }
 }
 }

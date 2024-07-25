@@ -4,6 +4,7 @@ using BusinessObjects.Models;
 using DTOs.Response.Booking;
 using DTOs.Response.Customer;
 using DTOs.Response.Doctor;
+using DTOs.Response.MedicalRecordResponse;
 using DTOs.Response.Pet;
 using DTOs.Response.Schedule;
 using DTOs.Response.Service;
@@ -120,5 +121,17 @@ namespace Presentation.Client
 			var url = $"{_settings.BaseUrl}{_settings.CustomerEndpoint}/{id}";
 			return await _httpClient.GetFromJsonAsync<CustomerResponse>(url);
 		}
-	}
+
+        public async Task<List<MedicalRecordResponse>> GetMedicalsAsync()
+        {
+            var url = $"{_settings.BaseUrl}{_settings.MedicalRecordEndpoint}";
+            return await _httpClient.GetFromJsonAsync<List<MedicalRecordResponse>>(url);
+        }
+
+        public async Task<MedicalRecordResponse> GetMedicalByIdAsync(int id)
+        {
+            var url = $"{_settings.BaseUrl}{_settings.MedicalRecordEndpoint}/{id}";
+            return await _httpClient.GetFromJsonAsync<MedicalRecordResponse>(url);
+        }
+    }
 }

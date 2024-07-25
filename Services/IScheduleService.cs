@@ -78,7 +78,7 @@ namespace Services
             }
             if(!string.IsNullOrEmpty(request.RoomNo))
             {
-                schedulesQuery = schedulesQuery.Where(s => s.RoomNo.Contains(request.RoomNo));
+                schedulesQuery = schedulesQuery.Where(s => s.RoomNo.Equals(request.RoomNo));
             }
             var schedules = schedulesQuery.ToList();
             

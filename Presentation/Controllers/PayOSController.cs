@@ -29,10 +29,10 @@ namespace Presentation.Controllers
             try
             {
                 var payment = _paymentService.GetPaymentById(request.PaymentId);
-                //int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
+                int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
                 ItemData item = new ItemData("Payment", 1, Convert.ToInt32(payment.Amount * 1000));
                 List<ItemData> items = new List<ItemData> { item };
-                PaymentData paymentData = new PaymentData(payment.PaymentId, Convert.ToInt32(payment.Amount * 1000),  "Thanh Toán Payment"+ payment.PaymentId, items, request.cancelUrl, request.returnUrl);
+                PaymentData paymentData = new PaymentData(payment.PaymentId, Convert.ToInt32(payment.Amount * 1000),  "", items, request.cancelUrl, request.returnUrl);
 
                 CreatePaymentResult createPayment = await _payOS.createPaymentLink(paymentData);
 
