@@ -53,6 +53,9 @@ namespace Services.Class
                 }
                 doctor.Services.Add(service);
             }
+
+			await _repo.Update(doctor);
+
 			return response;
         }
 

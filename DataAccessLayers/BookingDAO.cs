@@ -136,8 +136,6 @@ namespace DataAccessLayers
                     Speciality = b.Doctor.Speciality,
                     Status = b.Doctor.Status,
                     UserId = b.Doctor.UserId
-
-
                 },
                 Schedule = new Schedule
                 {
@@ -149,9 +147,7 @@ namespace DataAccessLayers
                     RoomNo = b.Schedule.RoomNo,
                     SlotBooking = b.Schedule.SlotBooking,
                     Status = b.Schedule.Status
-
-                },
-                
+                },       
                 Services = b.Services.Select(s => new Service
                 {
                     ServiceId = s.ServiceId,
@@ -159,15 +155,10 @@ namespace DataAccessLayers
                     Price = s.Price,
                     Description = s.Description,
                     LimitTime = s.LimitTime
-
-
                 }).ToList()
-
-
-
-
-
-            }).FirstOrDefault();
+            })
+            .Where(b => b.BookingId == booking)
+            .FirstOrDefault();
 
 
 
