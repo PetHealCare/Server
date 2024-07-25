@@ -12,7 +12,8 @@ namespace Services.Interface
 	public interface IDoctorService
 	{
 		Task<DoctorResponse> Create(CreateDoctorRequest request);
-		Task<DoctorResponse> Update(UpdateDoctorRequest request);
+        Task<DoctorResponse> AddService(AddServiceRequest request);
+        Task<DoctorResponse> Update(UpdateDoctorRequest request);
 		Task<DoctorResponse> GetById(int id);
 		Task<DoctorResponse> GetByUserId(int userId);
 		Task<PaginatedList<DoctorResponse>> GetList(GetListDoctorRequest request);

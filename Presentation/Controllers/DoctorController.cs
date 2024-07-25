@@ -99,13 +99,39 @@ namespace Presentation.Controllers
 			return CreatedAtAction(nameof(GetById), new { id = doctor.DoctorId }, new PetHealthCareResponse<DoctorResponse>(true, "Doctor created successfully", doctor));
 		}
 
-		/// <summary>
-		/// Update a doctor
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="request"></param>
-		/// <returns></returns>
-		[ProducesResponseType(typeof(PetHealthCareResponse<DoctorResponse>), StatusCodes.Status200OK)]
+        /// <summary>
+        /// Add services for doctor
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(PetHealthCareResponse<DoctorResponse>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status400BadRequest)]
+        [HttpPost("add/master-service")]
+        public async Task<IActionResult> AddService([FromBody] AddServiceRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new PetHealthCareResponse<DoctorResponse>(false, "Invalid data", null));
+            }
+
+            var doctor = await _service.AddService(request);
+
+			if (doctor == null)
+			{
+				return NotFound(new PetHealthCareResponse<DoctorResponse>(false, "Doctor or serviceId not found", null));
+			}
+
+            return Ok(new PetHealthCareResponse<DoctorResponse>(true, "Doctor add list service for doctor successfully", doctor));
+        }
+
+        /// <summary>
+        /// Update a doctor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(PetHealthCareResponse<DoctorResponse>), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(typeof(PetHealthCareResponse<>), StatusCodes.Status404NotFound)]
 		[HttpPut("{id}")]
