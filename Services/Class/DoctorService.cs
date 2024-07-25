@@ -19,23 +19,44 @@ using Services.Interface;
 
 namespace Services.Class
 {
-	public class DoctorService : IDoctorService
+    public class DoctorService : IDoctorService
 	{
-		private readonly IDoctorRepository _repo;
+        private readonly IDoctorRepository _repo;
 		private readonly IUserRepository _userRepo;
-		private readonly IMapper _mapper;
+        private readonly IServiceRepository _serviceRepo;
+        private readonly IMapper _mapper;
 		private readonly OdataClient _odataClient;
 
+        public DoctorService(IDoctorRepository repo, IUserRepository userRepo, IServiceRepository serviceRepo, IMapper mapper, OdataClient odataClient)
+        {
+            _repo = repo;
+            _userRepo = userRepo;
+            _serviceRepo = serviceRepo;
+            _mapper = mapper;
+            _odataClient = odataClient;
+        }
 
-		public DoctorService(IDoctorRepository repo, IUserRepository userRepo, IMapper mapper, OdataClient odataClient)
-		{
-			_repo = repo;
-			_userRepo = userRepo;
-			_mapper = mapper;
-			_odataClient = odataClient;
-		}
+        public async Task<DoctorResponse> AddService(AddServiceRequest request)
+        {
+            var response = new DoctorResponse();
+			var doctor = await _repo.GetDoctorById(request.DoctorId);
+			if (doctor == null || doctor.Status == false)
+			{
+                return null;
+            }
+			foreach (var serviceId in request.ListServiceIds)
+			{
+                var service = _serviceRepo.GetById(serviceId);
+                if (service == null)
+				{
+                    return null;
+                }
+                doctor.Services.Add(service);
+            }
+			return response;
+        }
 
-		public async Task<DoctorResponse> Create(CreateDoctorRequest request)
+        public async Task<DoctorResponse> Create(CreateDoctorRequest request)
 		{
 			var user = _mapper.Map<User>(request);
 			user.Role = (int)RoleEnum.Doctor;
