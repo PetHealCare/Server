@@ -97,7 +97,7 @@ namespace Services
 			booking.BookingDate = DateTime.Now;
 			booking.Slot = createSchedule.Result.SlotBooking;
 			booking.Note = request.Note;
-			booking.Status = true;
+			booking.Status = request.Status;
 			var result = await _repo.CreateBooking(booking);
 			if (result == null)
 			{
