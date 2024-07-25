@@ -38,11 +38,11 @@ namespace Presentation.Controllers
             
         }
         [HttpGet("{id}")]
-        public IActionResult GetBookingById(int id)
+        public async Task<IActionResult> GetBookingById(int id)
         {
             try
             {
-                var response = _service.GetBookingById(id);
+                var response = await _service.GetBookingById(id);
                 if (response == null)
                 {
                     return NotFound();
