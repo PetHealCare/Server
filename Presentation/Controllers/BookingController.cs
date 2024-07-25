@@ -9,7 +9,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-	[Authorize]
+	//[Authorize]
 	public class BookingController : ControllerBase
     {
         private readonly IBookingService _service;
