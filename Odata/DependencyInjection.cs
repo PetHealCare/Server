@@ -53,7 +53,6 @@ namespace Odata
 
 			services.AddScoped<IMedicalRecordSerivce, MedicalRecordService>();
 			services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
-			
 		}
 	}
 }

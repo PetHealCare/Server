@@ -18,6 +18,7 @@ namespace Presentation.Controllers
 {
 	[Route("api/pet")]
 	[ApiController]
+	[Authorize]
 	public class PetController : ControllerBase
 	{
 		private readonly IPetService _service;

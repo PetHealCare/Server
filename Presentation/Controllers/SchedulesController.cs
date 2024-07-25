@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.Models;
 using DTOs.Request.Schedule;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -8,7 +9,8 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SchedulesController : ControllerBase
+	[Authorize]
+	public class SchedulesController : ControllerBase
     {
         private readonly IScheduleService _scheduleService;
         public SchedulesController(IScheduleService scheduleService)
