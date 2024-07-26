@@ -15,5 +15,6 @@ namespace DTOs.Request.Pet
 		public int? Age { get; set; }
 		public string? Generic { get; set; }
 		public string? Description { get; set; }
-	}
+        public bool? Status { get; set; }
+    }
 }

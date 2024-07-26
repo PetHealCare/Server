@@ -95,7 +95,7 @@ namespace Services.Class
 			pet.Description = request.Description ?? pet.Description;
 			pet.Generic = request.Generic ?? pet.Generic;
 			pet.Age = request.Age ?? pet.Age;
-
+			pet.Status = request.Status ?? pet.Status;
 			// Save changes
 			await _repo.Update(pet);
 
