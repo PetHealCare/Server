@@ -23,13 +23,13 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpPost("/create-payment-link")]
+        [HttpPost("/api/create-payment-link")]
         public async Task<IActionResult> Checkout([FromBody] CreatePaymentLinkRequest request)
         {
             try
             {
                 var payment = _paymentService.GetPaymentById(request.PaymentId);
-                int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
+                //int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
                 ItemData item = new ItemData("Payment", 1, Convert.ToInt32(payment.Amount * 1000));
                 List<ItemData> items = new List<ItemData> { item };
                 PaymentData paymentData = new PaymentData(payment.PaymentId, Convert.ToInt32(payment.Amount * 1000),  "", items, request.cancelUrl, request.returnUrl);
