@@ -52,7 +52,7 @@ namespace Odata.Service
 				Species = item.Pet.Species,
 				Status = item.Pet.Status,
 				CustomerId = item.Pet.CustomerId,
-				Age = item.Pet.Age,
+				Dob = item.Pet.Dob,
 				Gender = item.Pet.Gender,
 				Generic = item.Pet.Generic,
 				Description = item.Pet.Description
@@ -126,7 +126,7 @@ namespace Odata.Service
 					Species = item.Pet.Species,
 					Status = item.Pet.Status,
 					CustomerId = item.Pet.CustomerId,
-					Age = item.Pet.Age,
+					Dob = item.Pet.Dob,
 					Gender = item.Pet.Gender,
 					Generic = item.Pet.Generic,
 					Description = item.Pet.Description
