@@ -12,7 +12,7 @@ namespace DTOs.Request.Pet
 		public int PetId { get; set; }
 		public string? Name { get; set; }
 		public string? Species { get; set; }
-		public int? Age { get; set; }
+		public DateTime? Dob { get; set; }
 		public string? Generic { get; set; }
 		public string? Description { get; set; }
         public bool? Status { get; set; }

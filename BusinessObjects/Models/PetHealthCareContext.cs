@@ -48,7 +48,7 @@ namespace BusinessObjects.Models
 			return strConn;
 		}
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Bill>(entity =>
             {
@@ -130,7 +130,7 @@ namespace BusinessObjects.Models
                         r => r.HasOne<Booking>().WithMany().HasForeignKey("BookingId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__BookingSe__booki__6D0D32F4"),
                         j =>
                         {
-                            j.HasKey("BookingId", "ServiceId").HasName("PK__BookingS__22853CDE955EA59D");
+                            j.HasKey("BookingId", "ServiceId").HasName("PK__BookingS__22853CDE357BC059");
 
                             j.ToTable("BookingService");
 
@@ -144,7 +144,7 @@ namespace BusinessObjects.Models
             {
                 entity.ToTable("Customer");
 
-                entity.HasIndex(e => e.UserId, "UQ__Customer__CB9A1CDE9B7DA09A")
+                entity.HasIndex(e => e.UserId, "UQ__Customer__CB9A1CDE329AA12D")
                     .IsUnique();
 
                 entity.Property(e => e.CustomerId).HasColumnName("customerID");
@@ -179,7 +179,7 @@ namespace BusinessObjects.Models
             {
                 entity.ToTable("Doctor");
 
-                entity.HasIndex(e => e.UserId, "UQ__Doctor__CB9A1CDEC49F1D90")
+                entity.HasIndex(e => e.UserId, "UQ__Doctor__CB9A1CDE48D3B315")
                     .IsUnique();
 
                 entity.Property(e => e.DoctorId).HasColumnName("doctorID");
@@ -217,7 +217,7 @@ namespace BusinessObjects.Models
                         r => r.HasOne<Doctor>().WithMany().HasForeignKey("DoctorId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__DoctorSer__docto__70DDC3D8"),
                         j =>
                         {
-                            j.HasKey("DoctorId", "ServiceId").HasName("PK__DoctorSe__967182A5182B333C");
+                            j.HasKey("DoctorId", "ServiceId").HasName("PK__DoctorSe__967182A5079B60A3");
 
                             j.ToTable("DoctorService");
 
@@ -230,7 +230,7 @@ namespace BusinessObjects.Models
             modelBuilder.Entity<MedicalRecord>(entity =>
             {
                 entity.HasKey(e => e.RecordId)
-                    .HasName("PK__MedicalR__D825197E45225F61");
+                    .HasName("PK__MedicalR__D825197E9EC33A01");
 
                 entity.ToTable("MedicalRecord");
 
@@ -308,11 +308,13 @@ namespace BusinessObjects.Models
 
                 entity.Property(e => e.PetId).HasColumnName("petID");
 
-                entity.Property(e => e.Age).HasColumnName("age");
-
                 entity.Property(e => e.CustomerId).HasColumnName("customerID");
 
                 entity.Property(e => e.Description).HasColumnName("description");
+
+                entity.Property(e => e.Dob)
+                    .HasColumnType("date")
+                    .HasColumnName("DOB");
 
                 entity.Property(e => e.Gender).HasColumnName("gender");
 
@@ -397,7 +399,7 @@ namespace BusinessObjects.Models
             {
                 entity.ToTable("Transaction");
 
-                entity.HasIndex(e => e.PaymentId, "UQ__Transact__A0D9EFA7C6D13204")
+                entity.HasIndex(e => e.PaymentId, "UQ__Transact__A0D9EFA7BE68FD09")
                     .IsUnique();
 
                 entity.Property(e => e.TransactionId).HasColumnName("transactionID");
@@ -449,7 +451,7 @@ namespace BusinessObjects.Models
             {
                 entity.ToTable("Staff");
 
-                entity.HasIndex(e => e.UserId, "UQ__Staff__CB9A1CDE07E2C62F")
+                entity.HasIndex(e => e.UserId, "UQ__Staff__CB9A1CDEB5E3BD08")
                     .IsUnique();
 
                 entity.Property(e => e.StaffId).HasColumnName("staffID");

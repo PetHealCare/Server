@@ -48,7 +48,7 @@ namespace DataAccessLayers
                     Species = b.Pet.Species,
                     Status = b.Pet.Status,
                     CustomerId = b.Pet.CustomerId,
-                    Age = b.Pet.Age,
+                    Dob = b.Pet.Dob,
                     Gender = b.Pet.Gender,
                     Generic = b.Pet.Generic,
                     Description = b.Pet.Description
@@ -123,7 +123,7 @@ namespace DataAccessLayers
                     Species = b.Pet.Species,
                     Status = b.Pet.Status,
                     CustomerId = b.Pet.CustomerId,
-                    Age = b.Pet.Age,
+                    Dob = b.Pet.Dob,
                     Gender =  b.Pet.Gender,
                     Generic = b.Pet.Generic,
                     Description = b.Pet.Description
