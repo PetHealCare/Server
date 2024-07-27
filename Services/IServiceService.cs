@@ -39,14 +39,12 @@ namespace Services
 
 		public async Task<ServiceResponse> Create(ServiceRequest request)
         {
-            var doctor = await _doctorRepo.GetDoctorById(request.DoctorId);
             var service = new Service();
             service.ServiceName = request.ServiceName;
             service.Description = request.Description;
             service.LimitTime = request.LimitTime;
             service.Price = request.Price;
-
-            doctor.Services.Add(service);
+            service = _repo.Create(service);
 
             return  _mapper.Map<ServiceResponse>(service);
         }
