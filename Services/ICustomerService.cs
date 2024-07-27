@@ -35,8 +35,20 @@ namespace Services
         }
         public async Task<List<CustomerResponse>> GetAll()
         {
-            var customers = await _odataClient.GetCustomersAsync();
-            return customers;
+            var customers = _repo.GetAll();
+            List<CustomerResponse> customerResponses = new List<CustomerResponse>();
+            foreach (var customer in customers)
+            {
+                CustomerResponse customerResponse = new CustomerResponse();
+                customerResponse.CustomerId = customer.CustomerId;
+                customerResponse.FullName = customer.FullName;
+                customerResponse.PhoneNumber = customer.PhoneNumber;
+                customerResponse.Address = customer.Address;
+                customerResponse.Status = customer.Status;
+                customerResponse.UserId = customer.UserId;
+                customerResponses.Add(customerResponse);
+            }
+            return customerResponses;
         }
 
         public async Task<CustomerResponse> GetCustomerById(int customerId)
