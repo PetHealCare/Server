@@ -10,6 +10,7 @@ namespace DTOs.Response.MedicalRecordResponse
     {
         public int RecordId { get; set; }
         public int PetId { get; set; }
+        public string PetName { get; set; }
         public int DoctorId { get; set; }
         public DateTime? VisitDate { get; set; }
         public string? Diagnosis { get; set; }

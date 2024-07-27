@@ -1,6 +1,7 @@
 ﻿using DTOs.Request.MedicalRecord;
 using DTOs.Response.MedicalRecordResponse;
 using Repositories;
+using Repositories.Interface;
 
 namespace Odata.Service
 {
@@ -11,10 +12,14 @@ namespace Odata.Service
     }
     public class MedicalRecordService : IMedicalRecordSerivce
     {
+
         private readonly IMedicalRecordRepository _repo;
-        public MedicalRecordService(IMedicalRecordRepository repo)
+        private readonly IPetRepository _petRepo;
+
+        public MedicalRecordService(IMedicalRecordRepository repo, IPetRepository petRepo)
         {
-               _repo = repo;
+            _repo = repo;
+            _petRepo = petRepo;
         }
 
         public async Task<List<MedicalRecordResponse>> GetAll()
@@ -26,6 +31,8 @@ namespace Odata.Service
                 var medical = new MedicalRecordResponse();
                 medical.RecordId = item.RecordId;
                 medical.PetId = item.PetId;
+                var pet =(await _petRepo.GetPetById(id: item.PetId));
+                medical.PetName = pet.Name;
                 medical.DoctorId = item.DoctorId;
                 medical.VisitDate = item.VisitDate;
                 medical.Diagnosis = item.Diagnosis;
