@@ -3,6 +3,7 @@ using DTOs.Request.MedicalRecord;
 using DTOs.Response.MedicalRecordResponse;
 using Presentation.Client;
 using Repositories;
+using Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,16 @@ namespace Services
     public class MedicalRecordService : IMedicalRecordService
     {
         private readonly IMedicalRecordRepository _repo;
+        private readonly IPetRepository _petRepo;
         private readonly OdataClient _client;
-        public MedicalRecordService(IMedicalRecordRepository repo, OdataClient client)
+
+        public MedicalRecordService(IMedicalRecordRepository repo, IPetRepository petRepo, OdataClient client)
         {
             _repo = repo;
+            _petRepo = petRepo;
             _client = client;
         }
+
         public async Task<MedicalRecord> Create(MedicalRecordRequest record)
         {
             var request = new MedicalRecord();
@@ -63,6 +68,8 @@ namespace Services
                 var medical = new MedicalRecordResponse();
                 medical.RecordId = item.RecordId;
                 medical.PetId = item.PetId;
+                var pet = (await _petRepo.GetPetById(id: item.PetId));
+                medical.PetName = pet.Name;
                 medical.DoctorId = item.DoctorId;
                 medical.VisitDate = item.VisitDate;
                 medical.Diagnosis = item.Diagnosis;
