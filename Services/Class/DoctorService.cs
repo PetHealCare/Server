@@ -10,6 +10,7 @@ using DTOs;
 using DTOs.Request.Customer;
 using DTOs.Request.Doctor;
 using DTOs.Response.Doctor;
+using DTOs.Response.Pet;
 using DTOs.Response.Service;
 using Presentation.Client;
 using Repositories;
@@ -114,7 +115,7 @@ namespace Services.Class
 		public async Task<PaginatedList<DoctorResponse>> GetList(GetListDoctorRequest request)
 		{
 			var response = new PaginatedList<DoctorResponse>();
-			var doctorsQuery = (await _odataClient.GetDoctorAsync()).AsQueryable();
+			var doctorsQuery = (await _repo.GetList()).AsQueryable();
 
 			//filter doctor has not been deleted
 			doctorsQuery = doctorsQuery.Where(p => p.Status == true);
@@ -125,8 +126,8 @@ namespace Services.Class
 			}
 
 			var filterredDoctors = doctorsQuery.ToList();
-
-			return await filterredDoctors.ToPaginateAsync(request);
+			var mapper = _mapper.Map<List<DoctorResponse>>(filterredDoctors);
+            return await mapper.ToPaginateAsync(request);
 		}
 
 		public async Task<DoctorResponse> Update(UpdateDoctorRequest request)
