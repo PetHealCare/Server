@@ -60,7 +60,7 @@ namespace Services.Class
 			var petsQuery = (await _repo.GetList()).AsQueryable();
 
 			//filter pet has not been deleted
-			petsQuery = petsQuery.Where(p => p.Status == true);
+			//petsQuery = petsQuery.Where(p => p.Status == true);
 			
 			if (!string.IsNullOrEmpty(request.Name))
 			{
