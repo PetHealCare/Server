@@ -1,5 +1,7 @@
-﻿using BusinessObjects.Models;
+﻿using AutoMapper;
+using BusinessObjects.Models;
 using DTOs.Request.Schedule;
+using DTOs.Response.Doctor;
 using DTOs.Response.Schedule;
 using Presentation.Client;
 using Repositories;
@@ -24,14 +26,16 @@ namespace Services
     {
         private readonly IScheduleRepository _scheduleRepository;
         private readonly OdataClient _odataClient;
+        private readonly IMapper _mapper;
 
-		public ScheduleService(IScheduleRepository scheduleRepository, OdataClient odataClient)
-		{
-			_scheduleRepository = scheduleRepository;
-			_odataClient = odataClient;
-		}
+        public ScheduleService(IScheduleRepository scheduleRepository, OdataClient odataClient, IMapper mapper)
+        {
+            _scheduleRepository = scheduleRepository;
+            _odataClient = odataClient;
+            _mapper = mapper;
+        }
 
-		public async Task<Schedule> Create(ScheduleRequest request)
+        public async Task<Schedule> Create(ScheduleRequest request)
         {
             var schedule = new Schedule();
             schedule.ScheduleId = request.ScheduleId;
@@ -64,7 +68,7 @@ namespace Services
 
         public async Task<List<ScheduleResponse>> GetAll(GetListScheduleRequest request)
         {
-            var schedulesQuery = (await  _odataClient.GetScheduleAsync()).AsQueryable();
+            var schedulesQuery = (await  _scheduleRepository.GetAll()).AsQueryable();
 
       
 
@@ -86,8 +90,10 @@ namespace Services
             {
                 throw new Exception("Failed to get schedules");
             }
-        
-            return schedules;
+
+            var mapper = _mapper.Map<List<ScheduleResponse>>(schedules);
+
+            return mapper;
         }
 
         public async Task<bool> Update(ScheduleRequest request)

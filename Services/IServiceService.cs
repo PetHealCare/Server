@@ -66,8 +66,19 @@ namespace Services
 
         public async  Task<List<ServiceResponse>> GetAll()
         {
-            var services = await _odataClient.GetServicesAsync();
-			return services;
+            var services = _repo.GetAll();
+            List<ServiceResponse> serviceResponses = new List<ServiceResponse>();
+            foreach (var service in services)
+            {
+                ServiceResponse serviceResponse = new ServiceResponse();
+                serviceResponse.ServiceId = service.ServiceId;
+                serviceResponse.ServiceName = service.ServiceName;
+                serviceResponse.Description = service.Description;
+                serviceResponse.LimitTime = service.LimitTime;
+                serviceResponse.Price = service.Price;
+                serviceResponses.Add(serviceResponse);
+            }
+            return serviceResponses;
         }
 
         public async Task<bool> Update(ServiceRequest request)

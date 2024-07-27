@@ -47,7 +47,7 @@ namespace Services
 
         public async Task<List<MedicalRecordResponse>> GetAll(GetListMedicalRecordRequest request)
         {
-            var medicals = (await _client.GetMedicalsAsync()).AsQueryable();
+            var medicals = (await _repo.GetAll()).AsQueryable();
             //var medicals = (await _odataClient.GetBookingsAsync()).AsQueryable();
             if (request.PetId != 0)
             {
@@ -57,8 +57,20 @@ namespace Services
             {
                 medicals = medicals.Where(b => b.DoctorId == request.DoctorId);
             }
-           
-            return medicals.ToList();
+            var response = new List<MedicalRecordResponse>();
+            foreach (var item in medicals)
+            {
+                var medical = new MedicalRecordResponse();
+                medical.RecordId = item.RecordId;
+                medical.PetId = item.PetId;
+                medical.DoctorId = item.DoctorId;
+                medical.VisitDate = item.VisitDate;
+                medical.Diagnosis = item.Diagnosis;
+                medical.Treatment = item.Treatment;
+                medical.Notes = item.Notes;
+                response.Add(medical);
+            }
+            return response;
         }
 
         public async Task<MedicalRecordResponse> GetOne(int id)

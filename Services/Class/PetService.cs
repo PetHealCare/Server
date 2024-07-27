@@ -57,7 +57,7 @@ namespace Services.Class
 		public async Task<PaginatedList<PetResponse>> GetList(GetListPetRequest request)
 		{
 			var response = new PaginatedList<PetResponse>();
-			var petsQuery = (await _odataClient.GetPetsAsync()).AsQueryable();
+			var petsQuery = (await _repo.GetList()).AsQueryable();
 
 			//filter pet has not been deleted
 			petsQuery = petsQuery.Where(p => p.Status == true);
@@ -77,7 +77,8 @@ namespace Services.Class
 				petsQuery = petsQuery.Where(p => p.CustomerId == request.CustomerId);
 			}
 			var filterredPets = petsQuery.ToList();
-			response = await filterredPets.ToPaginateAsync(request);
+			var mapper = _mapper.Map<List<PetResponse>>(filterredPets);
+			response = await mapper.ToPaginateAsync(request);
 			return response;
 		}
 

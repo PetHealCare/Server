@@ -136,7 +136,8 @@ namespace Services
 
 		public async Task<List<BookingResponse>> GetBookings(GetListBookingRequest request)
 		{
-			var bookingsQuerry = (await _odataClient.GetBookingsAsync()).AsQueryable();
+			var bookingsQuerry = (await _repo.GetAll()).AsQueryable();
+
 			if (request.PetId != 0)
 			{
 				bookingsQuerry = bookingsQuerry.Where(b => b.PetId == request.PetId);
@@ -158,7 +159,76 @@ namespace Services
 				bookingsQuerry = bookingsQuerry.Where(b => b.Status == request.Status);
 			}
 
-			return bookingsQuerry.ToList();
+            var response = new List<BookingResponse>();
+            foreach (var item in bookingsQuerry)
+            {
+                var booking = new BookingResponse();
+                booking.BookingId = item.BookingId;
+                booking.PetId = item.PetId;
+                booking.CustomerId = item.CustomerId;
+                booking.DoctorId = item.DoctorId;
+                booking.ScheduleId = item.ScheduleId;
+                booking.Slot = item.Slot;
+                booking.BookingDate = item.BookingDate.Value;
+                booking.Note = item.Note;
+                booking.Status = item.Status;
+                booking.Pet = new PetResponse
+                {
+                    PetId = item.Pet.PetId,
+                    Name = item.Pet.Name,
+                    Species = item.Pet.Species,
+                    Status = item.Pet.Status,
+                    CustomerId = item.Pet.CustomerId,
+                    Dob = item.Pet.Dob,
+                    Gender = item.Pet.Gender,
+                    Generic = item.Pet.Generic,
+                    Description = item.Pet.Description
+                };
+                booking.Customer = new CustomerResponse
+                {
+                    CustomerId = item.Customer.CustomerId,
+                    FullName = item.Customer.FullName,
+                    PhoneNumber = item.Customer.PhoneNumber,
+                    Address = item.Customer.Address,
+                    Status = item.Customer.Status,
+                    UserId = item.Customer.UserId
+                };
+                booking.Doctor = new DoctorResponse
+                {
+                    DoctorId = item.Doctor.DoctorId,
+                    FullName = item.Doctor.FullName,
+                    PhoneNumber = item.Doctor.PhoneNumber,
+                    Speciality = item.Doctor.Speciality,
+                    Status = item.Doctor.Status,
+                    UserId = item.Doctor.UserId
+                };
+                booking.Schedule = new ScheduleResponse
+                {
+                    ScheduleId = item.Schedule.ScheduleId,
+                    DoctorId = item.Schedule.DoctorId,
+                    RoomNo = item.Schedule.RoomNo,
+                    StartTime = item.Schedule.StartTime,
+                    EndTime = item.Schedule.EndTime,
+                    SlotBooking = item.Schedule.SlotBooking,
+                    Status = item.Schedule.Status
+                };
+                booking.Services = new List<ServiceResponse>();
+                foreach (var service in item.Services)
+                {
+                    booking.Services.Add(new ServiceResponse
+                    {
+                        ServiceId = service.ServiceId,
+                        ServiceName = service.ServiceName,
+                        Description = service.Description,
+                        Price = service.Price,
+                        LimitTime = service.LimitTime,
+
+                    });
+                }
+                response.Add(booking);
+            }
+
+            return response;
 		}
 
 		public Task<bool> UpdateBooking(BookingRequest request)

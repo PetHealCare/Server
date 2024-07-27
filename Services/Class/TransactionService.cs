@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DTOs.Request.Transaction;
+using DTOs.Response.Doctor;
 using DTOs.Response.Pet;
 using DTOs.Response.Transaction;
 using Presentation.Client;
@@ -29,7 +30,7 @@ namespace Services.Class
 		public async Task<PaginatedList<TransactionResponse>> GetList(GetListTransactionRequest request)
 		{
 			var response = new PaginatedList<TransactionResponse>();
-			var transactionsQuery = (await _odataClient.GetTransactionsAsync()).AsQueryable();
+			var transactionsQuery = (await _repo.GetList()).AsQueryable();
 
 			// Apply filters based on AmountFrom and AmountTo
 			if (request.AmountFrom.HasValue)
@@ -43,7 +44,9 @@ namespace Services.Class
 			}
 
 			var filterredTransactions = transactionsQuery.ToList();
-			response = await filterredTransactions.ToPaginateAsync(request);
+            var mapper = _mapper.Map<List<TransactionResponse>>(filterredTransactions);
+
+            response = await mapper.ToPaginateAsync(request);
 			return response;
 		}
 

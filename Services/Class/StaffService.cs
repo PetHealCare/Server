@@ -16,6 +16,7 @@ using Services.Extentions.Paginate;
 using Services.Interface;
 using Presentation.Client;
 using DTOs.Request.Customer;
+using DTOs.Response.Doctor;
 
 namespace Services.Class
 {
@@ -77,7 +78,7 @@ namespace Services.Class
 		public async Task<PaginatedList<StaffResponse>> GetList(GetListStaffRequest request)
 		{
 			var response = new PaginatedList<StaffResponse>();
-			var staffsQuery = ( await _odataClient.GetStaffAsync()).AsQueryable();
+			var staffsQuery = ( _repo.GetAll()).AsQueryable();
 
 
 			if (!string.IsNullOrEmpty(request.FullName))
@@ -86,8 +87,9 @@ namespace Services.Class
 			}
 
 			var filterredStaffs = staffsQuery.ToList();
+            var mapper = _mapper.Map<List<StaffResponse>>(filterredStaffs);
 
-			return await filterredStaffs.ToPaginateAsync(request);
+            return await mapper.ToPaginateAsync(request);
 		}
 
 		public async Task<StaffResponse> Update(UpdateStaffRequest request)
